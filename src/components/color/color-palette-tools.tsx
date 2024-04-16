@@ -1,17 +1,34 @@
+import { forwardRef } from "react";
+
 import SelectBackgroundColorButton from "@/components/color/select-background-color-button";
 import CopyButton from "@/components/global/copy-button";
 
 import { Color } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
-interface ColorPaletteToolsProps {
-  color: Color;
+interface ColorPaletteToolsProps
+  extends React.ComponentPropsWithoutRef<"section"> {
+  hexCode: Color["hexCode"];
 }
 
-export default function ColorPaletteTools({ color }: ColorPaletteToolsProps) {
+const ColorPaletteTools = forwardRef<
+  React.ElementRef<"section">,
+  ColorPaletteToolsProps
+>(({ hexCode, className, ...props }, ref) => {
   return (
-    <section className="invisible mx-auto flex w-fit items-center justify-center rounded-full bg-secondary p-1 opacity-0 shadow-md transition-all duration-300 ease-in group-hover/color-palette:visible group-hover/color-palette:opacity-100 group-hover/color-palette:transition-all group-hover/color-palette:duration-500 group-hover/color-palette:ease-out">
-      <CopyButton text={color.hexCode} />
-      <SelectBackgroundColorButton hexCode={color.hexCode} />
+    <section
+      ref={ref}
+      className={cn(
+        "mx-auto flex w-fit items-center justify-center rounded-full bg-secondary p-1 shadow-md",
+        className,
+      )}
+      {...props}
+    >
+      <CopyButton text={hexCode} />
+      <SelectBackgroundColorButton hexCode={hexCode} />
     </section>
   );
-}
+});
+ColorPaletteTools.displayName = "ColorPaletteTools";
+
+export default ColorPaletteTools;
