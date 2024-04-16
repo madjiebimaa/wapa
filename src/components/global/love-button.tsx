@@ -22,7 +22,7 @@ const LoveButton = forwardRef<HTMLButtonElement, LoveButtonProps>(
       colorActions.loveColor(id);
     };
 
-    const hasLoved = Boolean(lovedColors.find((colorId) => colorId === id));
+    const hasLoved = lovedColors.includes(id);
 
     return (
       <Button

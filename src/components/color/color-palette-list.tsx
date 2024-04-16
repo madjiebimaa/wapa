@@ -1,9 +1,13 @@
+"use client";
+
 import ColorPalette from "@/components/color/color-palette";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import colors from "@/data/vinilex-colors.json";
+import { useFilteredColors } from "@/store/color";
 
 export default function ColorPaletteList() {
+  const colors = useFilteredColors();
+
   return (
     <ScrollArea className="flex-1">
       <section className="grid grid-cols-[repeat(auto-fit,_minmax(130px,_1fr))] gap-4 p-4">

@@ -19,7 +19,7 @@ const ColorPaletteTools = forwardRef<
     <section
       ref={ref}
       className={cn(
-        "mx-auto flex w-fit items-center justify-center rounded-full bg-secondary p-1 shadow-md",
+        "mx-auto flex w-fit items-center justify-center gap-1 rounded-full bg-secondary p-1 shadow-md",
         className,
       )}
       {...props}

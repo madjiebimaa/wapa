@@ -26,7 +26,7 @@ export default function CopyButton({ text }: CopyButtonProps) {
     <Button
       variant="ghost"
       size="icon"
-      className="shrink-0 rounded-full hover:bg-gray-200 focus-visible:ring-gray-200 focus-visible:ring-offset-0"
+      className="shrink-0 rounded-full bg-white hover:bg-gray-200 focus-visible:ring-offset-0"
       onClick={handleCopyClick}
     >
       <Icon className="size-4 shrink-0" />
