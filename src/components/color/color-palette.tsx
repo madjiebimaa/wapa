@@ -1,3 +1,5 @@
+import ColorPaletteTools from "@/components/color/color-palette-tools";
+
 import { Color } from "@/lib/types";
 
 interface ColorPaletteProps {
@@ -6,7 +8,7 @@ interface ColorPaletteProps {
 
 export default function ColorPalette({ color }: ColorPaletteProps) {
   return (
-    <div className="mx-auto flex min-w-[130px] max-w-[200px] flex-col gap-4">
+    <div className="group/color-palette mx-auto flex min-w-[130px] max-w-[200px] flex-col gap-2">
       <div
         style={{ background: color.hexCode }}
         className="mx-auto size-20 rounded-full shadow-md"
@@ -15,6 +17,7 @@ export default function ColorPalette({ color }: ColorPaletteProps) {
         <span className="text-xs">{color.name}</span>
         <span className="text-xs">{color.code}</span>
       </div>
+      <ColorPaletteTools color={color} />
     </div>
   );
 }
