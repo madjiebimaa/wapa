@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+
 import ColorFilters from "@/components/color/color-filters";
 import ColorPaletteList from "@/components/color/color-palette-list";
 
@@ -13,7 +15,9 @@ export default function Home() {
       style={{ backgroundColor: selectedBackgroundColor }}
       className="flex h-screen flex-col md:flex-row"
     >
-      <ColorFilters />
+      <Suspense>
+        <ColorFilters />
+      </Suspense>
       <ColorPaletteList />
     </main>
   );
