@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import vinilexColors from "@/data/vinilex-colors.json";
 import { DEFAULT_BACKGROUND_COLOR } from "@/lib/constants";
-import { Color } from "@/lib/types";
+import { Color, FilterColorArgs } from "@/lib/types";
 
 type ColorState = {
   colors: Color[];
@@ -16,7 +16,7 @@ type ColorActions = {
   actions: {
     selectBackgroundColor: (hexCode: Color["hexCode"]) => void;
     loveColor: (id: Color["id"]) => void;
-    filterColors: (query: Color["name"] | Color["code"]) => void;
+    filterColors: (args: FilterColorArgs) => void;
   };
 };
 
@@ -55,16 +55,24 @@ const colorStore = create<ColorState & ColorActions>()(
               lovedColors: [...state.lovedColors, id],
             };
           }),
-        filterColors: (query) =>
+        filterColors: ({ query = "", love }) =>
           set((state) => {
+            let filteredColors = [...state.colors];
+
+            if (love) {
+              filteredColors = filteredColors.filter((color) =>
+                state.lovedColors.includes(color.id),
+              );
+            }
+
             if (query.length === 0) {
               return {
-                filteredColors: [...state.colors],
+                filteredColors,
               };
             }
 
             return {
-              filteredColors: state.colors.filter((color) => {
+              filteredColors: filteredColors.filter((color) => {
                 const lowerCasedQuery = query.toLowerCase();
 
                 return (

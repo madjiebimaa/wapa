@@ -4,3 +4,8 @@ export type Color = {
   code: string;
   hexCode: string;
 };
+
+export type FilterColorArgs = {
+  query?: Color["name"] | Color["code"];
+  love?: boolean;
+};
