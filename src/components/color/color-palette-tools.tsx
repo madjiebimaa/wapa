@@ -1,32 +1,26 @@
 import { forwardRef } from "react";
 
 import SelectBackgroundColorButton from "@/components/color/select-background-color-button";
+import BubbleContainer from "@/components/global/bubble-container";
 import CopyButton from "@/components/global/copy-button";
 
 import { Color } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface ColorPaletteToolsProps
-  extends React.ComponentPropsWithoutRef<"section"> {
+  extends React.ComponentPropsWithoutRef<typeof BubbleContainer> {
   hexCode: Color["hexCode"];
 }
 
 const ColorPaletteTools = forwardRef<
-  React.ElementRef<"section">,
+  React.ElementRef<typeof BubbleContainer>,
   ColorPaletteToolsProps
 >(({ hexCode, className, ...props }, ref) => {
   return (
-    <section
-      ref={ref}
-      className={cn(
-        "mx-auto flex w-fit items-center justify-center gap-1 rounded-full bg-secondary p-1 shadow-md",
-        className,
-      )}
-      {...props}
-    >
+    <BubbleContainer ref={ref} className={cn("gap-1", className)} {...props}>
       <CopyButton text={hexCode} />
       <SelectBackgroundColorButton hexCode={hexCode} />
-    </section>
+    </BubbleContainer>
   );
 });
 ColorPaletteTools.displayName = "ColorPaletteTools";

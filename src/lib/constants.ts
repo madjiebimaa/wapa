@@ -1,3 +1,4 @@
-import { Color } from "@/lib/types";
+import { Color, ColorSortingOption } from "@/lib/types";
 
 export const DEFAULT_BACKGROUND_COLOR: Color["hexCode"] = "#FFFFFF";
+export const DEFAULT_COLOR_SORTING_OPTION: ColorSortingOption = "unsorted"

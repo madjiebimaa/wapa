@@ -2,8 +2,12 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import vinilexColors from "@/data/vinilex-colors.json";
-import { DEFAULT_BACKGROUND_COLOR } from "@/lib/constants";
+import {
+  DEFAULT_BACKGROUND_COLOR,
+  DEFAULT_COLOR_SORTING_OPTION,
+} from "@/lib/constants";
 import { Color, FilterColorArgs } from "@/lib/types";
+import { applyColorSorting } from "@/lib/utils";
 
 type ColorState = {
   colors: Color[];
@@ -55,7 +59,11 @@ const colorStore = create<ColorState & ColorActions>()(
               lovedColors: [...state.lovedColors, id],
             };
           }),
-        filterColors: ({ query = "", love }) =>
+        filterColors: ({
+          query = "",
+          love,
+          sort = DEFAULT_COLOR_SORTING_OPTION,
+        }) =>
           set((state) => {
             let filteredColors = [...state.colors];
 
@@ -65,21 +73,23 @@ const colorStore = create<ColorState & ColorActions>()(
               );
             }
 
-            if (query.length === 0) {
-              return {
-                filteredColors,
-              };
+            if (sort !== DEFAULT_COLOR_SORTING_OPTION) {
+              filteredColors = applyColorSorting(filteredColors, sort);
             }
 
-            return {
-              filteredColors: filteredColors.filter((color) => {
+            if (query.length !== 0) {
+              filteredColors = filteredColors.filter((color) => {
                 const lowerCasedQuery = query.toLowerCase();
 
                 return (
                   color.name.toLowerCase().includes(lowerCasedQuery) ||
                   color.code.toLowerCase().includes(lowerCasedQuery)
                 );
-              }),
+              });
+            }
+
+            return {
+              filteredColors,
             };
           }),
       },
