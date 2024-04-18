@@ -56,7 +56,7 @@ export default function ColorFilters() {
           onChange={(event) => setQuery(event.target.value)}
         />
       </BubbleContainer>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2 md:justify-between">
         <BubbleContainer>
           <Button
             variant="secondary"
