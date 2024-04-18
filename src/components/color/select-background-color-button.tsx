@@ -2,7 +2,7 @@
 
 import { Brush } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import BubbleButton from "@/components/global/bubble-button";
 
 import { Color } from "@/lib/types";
 import { useColorActions } from "@/store/color";
@@ -21,13 +21,8 @@ export default function SelectBackgroundColorButton({
   };
 
   return (
-    <Button
-      variant="secondary"
-      size="icon"
-      className="shrink-0 rounded-full bg-white hover:bg-gray-200 focus-visible:ring-offset-0"
-      onClick={handleSelectBackgroundColorClick}
-    >
+    <BubbleButton onClick={handleSelectBackgroundColorClick}>
       <Brush className="size-4 shrink-0" />
-    </Button>
+    </BubbleButton>
   );
 }

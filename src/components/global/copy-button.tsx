@@ -3,7 +3,7 @@
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import BubbleButton from "@/components/global/bubble-button";
 
 interface CopyButtonProps {
   text: string;
@@ -23,13 +23,8 @@ export default function CopyButton({ text }: CopyButtonProps) {
   const Icon = isCopied ? Check : Copy;
 
   return (
-    <Button
-      variant="secondary"
-      size="icon"
-      className="shrink-0 rounded-full bg-white hover:bg-gray-200 focus-visible:ring-offset-0"
-      onClick={handleCopyClick}
-    >
+    <BubbleButton onClick={handleCopyClick}>
       <Icon className="size-4 shrink-0" />
-    </Button>
+    </BubbleButton>
   );
 }

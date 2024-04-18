@@ -11,7 +11,7 @@ import ColorPaletteListSkeleton from "@/components/skeleton/color-palette-list-s
 import { cn, getOppositeContrast } from "@/lib/utils";
 import { useSelectedBackgroundColor } from "@/store/color";
 
-export default function Home() {
+export default function HomePage() {
   const selectedBackgroundColor = useSelectedBackgroundColor();
 
   return (

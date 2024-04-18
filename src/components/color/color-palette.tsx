@@ -15,8 +15,12 @@ export default function ColorPalette({ color }: ColorPaletteProps) {
   return (
     <div className="group/color-palette relative flex min-w-[130px] max-w-[130px] flex-col items-center justify-center gap-2">
       <LoveButton
-        id={color.id}
-        className={cn("absolute right-0 top-0", showWhenHoverStyle)}
+        colorId={color.id}
+        variant="ghost"
+        className={cn(
+          "absolute right-0 top-0 size-fit bg-transparent p-0 text-secondary-foreground hover:bg-transparent hover:text-foreground",
+          showWhenHoverStyle,
+        )}
       />
       <div
         style={{ background: color.hexCode }}
@@ -27,6 +31,7 @@ export default function ColorPalette({ color }: ColorPaletteProps) {
         <span className="text-xs">{color.code}</span>
       </div>
       <ColorPaletteTools
+        colorId={color.id}
         hexCode={color.hexCode}
         className={showWhenHoverStyle}
       />

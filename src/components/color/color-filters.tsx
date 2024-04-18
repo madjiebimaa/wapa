@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 
+import BubbleButton from "@/components/global/bubble-button";
 import BubbleContainer from "@/components/global/bubble-container";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { useQuery } from "@/hooks/use-query";
@@ -59,26 +59,18 @@ export default function ColorFilters() {
       </BubbleContainer>
       <div className="flex items-center gap-2 md:justify-between">
         <BubbleContainer>
-          <Button
-            variant="secondary"
-            size="icon"
-            className="shrink-0 rounded-full bg-white hover:bg-gray-200 focus-visible:ring-offset-0"
-            onClick={() => setLove(!love)}
-          >
+          <BubbleButton onClick={() => setLove(!love)}>
             <Heart className={cn("size-4 shrink-0", love && "fill-red-400")} />
-          </Button>
+          </BubbleButton>
         </BubbleContainer>
         <BubbleContainer className="gap-1">
           {sortingOptions.map(({ id, Icon }) => {
             const isSelectedSortOption = sort === id;
 
             return (
-              <Button
+              <BubbleButton
                 key={id}
-                variant="secondary"
-                size="icon"
                 className={cn(
-                  "shrink-0 rounded-full bg-white hover:bg-gray-200 focus-visible:ring-offset-0",
                   isSelectedSortOption && "bg-foreground hover:bg-gray-500",
                 )}
                 onClick={() =>
@@ -91,7 +83,7 @@ export default function ColorFilters() {
                     isSelectedSortOption && "text-background",
                   )}
                 />
-              </Button>
+              </BubbleButton>
             );
           })}
         </BubbleContainer>
