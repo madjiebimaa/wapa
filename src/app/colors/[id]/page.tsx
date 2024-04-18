@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import ClosestColorList from "@/components/color/closest-color-list";
 import BubbleButton from "@/components/global/bubble-button";
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
@@ -19,6 +20,7 @@ export default function ColorPage({
 }) {
   const router = useRouter();
   const colors = useColors();
+
   const currentColor = colors.find((color) => color.id === id)!;
 
   return (
@@ -43,6 +45,11 @@ export default function ColorPage({
         </BubbleContainer>
       </div>
       <div className="flex items-center gap-2">
+        <BubbleContainer>
+          <BubbleButton onClick={() => router.push("/")}>
+            <Home className="size-4 shrink-0" />
+          </BubbleButton>
+        </BubbleContainer>
         <BubbleContainer className="gap-1">
           <BubbleText>{currentColor.hexCode}</BubbleText>
           <CopyButton text={currentColor.hexCode} />
@@ -51,6 +58,7 @@ export default function ColorPage({
           <LoveButton colorId={currentColor.id} />
         </BubbleContainer>
       </div>
+      <ClosestColorList color={currentColor} colors={colors} />
     </main>
   );
 }

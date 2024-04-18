@@ -11,6 +11,12 @@ export type RGB = {
   b: number;
 };
 
+export type XYZ = {
+  x: number
+  y: number
+  z: number
+}
+
 export type ColorSortingOption =
   | "unsorted"
   | "ascending-name"
