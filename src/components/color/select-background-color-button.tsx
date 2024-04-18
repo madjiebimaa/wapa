@@ -22,7 +22,7 @@ export default function SelectBackgroundColorButton({
 
   return (
     <Button
-      variant="ghost"
+      variant="secondary"
       size="icon"
       className="shrink-0 rounded-full bg-white hover:bg-gray-200 focus-visible:ring-offset-0"
       onClick={handleSelectBackgroundColorClick}
