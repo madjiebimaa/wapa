@@ -19,7 +19,7 @@ import { useQuery } from "@/hooks/use-query";
 import { DEFAULT_COLOR_SORTING_OPTION } from "@/lib/constants";
 import { ColorSortingOption } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { useColorActions } from "@/store/color";
+import { useColorActions, useLovedColors } from "@/store/color";
 
 const sortingOptions: {
   id: ColorSortingOption;
@@ -38,11 +38,12 @@ export default function ColorFilters() {
     "sort",
     DEFAULT_COLOR_SORTING_OPTION,
   );
+  const lovedColors = useLovedColors();
   const colorActions = useColorActions();
 
   useEffect(() => {
     colorActions.filterColors({ query, love, sort });
-  }, [query, love, sort, colorActions]);
+  }, [query, love, sort, lovedColors, colorActions]);
 
   return (
     <section className="flex flex-col gap-2 p-4">
