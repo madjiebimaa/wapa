@@ -1,7 +1,18 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-import { Color, ColorSortingOption, RGB, XYZ } from "@/lib/types";
+import {
+  Color,
+  ColorSortingOption,
+  GenerateGridArgs,
+  GenerateMatrixArgs,
+  GetClosestColorsArgs,
+  Grid,
+  Matrix,
+  MatrixItem,
+  RGB,
+  XYZ,
+} from "@/lib/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -117,11 +128,11 @@ function colorDistance(rgb: RGB, comparedRgb: RGB) {
   );
 }
 
-export function getClosestColors(
-  color: Color,
-  comparedColors: Color[],
-  n: number = 5,
-) {
+export function getClosestColors({
+  color,
+  comparedColors,
+  n = 5,
+}: GetClosestColorsArgs) {
   return comparedColors
     .filter((comparedColor) => comparedColor.id !== color.id)
     .map((comparedColor) => ({
@@ -133,4 +144,138 @@ export function getClosestColors(
     }))
     .sort((a, b) => a.distance - b.distance)
     .slice(0, n);
+}
+
+function generateEmptyMatrix(size: number): Matrix {
+  return Array(size)
+    .fill(null)
+    .map(() => Array(size).fill(0));
+}
+
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function insertItemIntoMatrix(
+  { rowStartIndex, columnStartIndex, size }: MatrixItem,
+  matrix: Matrix,
+) {
+  for (let row = rowStartIndex; row < rowStartIndex + size; row++) {
+    for (let col = columnStartIndex; col < columnStartIndex + size; col++) {
+      matrix[row][col] = size;
+    }
+  }
+
+  return matrix;
+}
+
+function generateItem(size: number, matrixSize: number): MatrixItem {
+  const matrix = generateEmptyMatrix(matrixSize);
+
+  const rowStartIndex = getRandomInt(0, matrixSize - size);
+  const columnStartIndex = getRandomInt(0, matrixSize - size);
+
+  const insertedMatrix = insertItemIntoMatrix(
+    { rowStartIndex, columnStartIndex, size, matrix },
+    matrix,
+  );
+
+  return { rowStartIndex, columnStartIndex, size, matrix: insertedMatrix };
+}
+
+function isItemOverlap(item: MatrixItem | null, matrix: Matrix) {
+  if (item === null) {
+    return true;
+  }
+
+  let isOverlap = false;
+
+  for (
+    let row = item.rowStartIndex;
+    row < item.rowStartIndex + item.size;
+    row++
+  ) {
+    for (
+      let col = item.columnStartIndex;
+      col < item.columnStartIndex + item.size;
+      col++
+    ) {
+      if (matrix[row][col] !== 0) {
+        isOverlap = true;
+      }
+    }
+  }
+
+  return isOverlap;
+}
+
+function generateMatrix({
+  size,
+  itemSizes,
+  numberOfItems,
+}: GenerateMatrixArgs) {
+  let matrix = generateEmptyMatrix(size);
+
+  for (let index = 0; index < numberOfItems; index++) {
+    let item: MatrixItem | null = null;
+
+    while (isItemOverlap(item, matrix)) {
+      const candidateItem = generateItem(itemSizes[index], matrix.length);
+      item = candidateItem;
+    }
+
+    matrix = insertItemIntoMatrix(item!, matrix);
+  }
+
+  return matrix;
+}
+
+function removeItemFromMatrix(item: MatrixItem, matrix: Matrix) {
+  for (
+    let row = item.rowStartIndex;
+    row < item.rowStartIndex + item.size;
+    row++
+  ) {
+    for (
+      let col = item.columnStartIndex;
+      col < item.columnStartIndex + item.size;
+      col++
+    ) {
+      matrix[row][col] = 0;
+    }
+  }
+
+  return matrix;
+}
+
+export function generateGrid(args: GenerateGridArgs) {
+  let matrix = generateMatrix(args);
+  const grid: Grid = [];
+
+  for (let row = 0; row < matrix.length; row++) {
+    for (let col = 0; col < matrix[row].length; col++) {
+      if (matrix[row][col] !== 0) {
+        const size = matrix[row][col];
+
+        const gridRowStart = row + 1;
+        const gridRowEnd = row + size + 1;
+        const gridColumnStart = col + 1;
+        const gridColumnEnd = col + size + 1;
+
+        matrix = removeItemFromMatrix(
+          {
+            rowStartIndex: row,
+            columnStartIndex: col,
+            size,
+            matrix: generateEmptyMatrix(matrix.length),
+          },
+          matrix,
+        );
+
+        grid.push({ gridRowStart, gridRowEnd, gridColumnStart, gridColumnEnd });
+      }
+    }
+  }
+
+  return grid;
 }

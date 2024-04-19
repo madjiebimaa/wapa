@@ -12,10 +12,33 @@ export type RGB = {
 };
 
 export type XYZ = {
-  x: number
-  y: number
-  z: number
-}
+  x: number;
+  y: number;
+  z: number;
+};
+
+export type MatrixItem = {
+  matrix: number[][];
+  rowStartIndex: number;
+  columnStartIndex: number;
+  size: number;
+};
+
+export type Matrix = number[][];
+
+export type GridItem = {
+  gridRowStart: number;
+  gridRowEnd: number;
+  gridColumnStart: number;
+  gridColumnEnd: number;
+};
+
+export type Grid = GridItem[];
+
+export type Bubble = {
+  color: Pick<Color, "id" | "hexCode">;
+  position: GridItem;
+};
 
 export type ColorSortingOption =
   | "unsorted"
@@ -29,3 +52,17 @@ export type FilterColorArgs = {
   love?: boolean;
   sort?: ColorSortingOption;
 };
+
+export type GetClosestColorsArgs = {
+  color: Color;
+  comparedColors: Color[];
+  n: number;
+};
+
+export type GenerateMatrixArgs = {
+  size: number;
+  itemSizes: number[];
+  numberOfItems: number;
+};
+
+export type GenerateGridArgs = GenerateMatrixArgs;

@@ -1,12 +1,14 @@
-import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
+
+import { cn } from "@/lib/utils";
 
 const BubbleContainer = forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }) => {
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       className={cn(
         "flex w-fit items-center justify-center rounded-full bg-secondary p-1 shadow-md",
         className,
