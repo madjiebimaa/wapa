@@ -11,6 +11,7 @@ import ClientOnly from "@/components/global/client-only";
 import HexCodeInput from "@/components/hex/hex-code-input";
 import RgbInput from "@/components/hex/rgb-input";
 
+import CmykInput from "@/components/hex/cmyx-input";
 import { DEFAULT_BACKGROUND_COLOR } from "@/lib/constants";
 import {
   cn,
@@ -18,6 +19,7 @@ import {
   getRandomInt,
   hexCodeToRgb,
   isHexCode,
+  rgbToCmyk,
 } from "@/lib/utils";
 import { useColors } from "@/store/color";
 
@@ -27,15 +29,19 @@ export default function HexsPage() {
 
   const [hexCode, setHexCode] = useState(randomizeHexCode);
   const [rgb, setRgb] = useState(hexCodeToRgb(hexCode));
+  const [cmyk, setCmyk] = useState(rgbToCmyk(rgb));
   const router = useRouter();
 
   useEffect(() => {
     const handleRandomizeHexCode = (event: KeyboardEvent) => {
       if (event.key === "Alt") {
         const nextHexCode = randomizeHexCode;
+        const nextRgb = hexCodeToRgb(nextHexCode);
+        const nextCmyk = rgbToCmyk(nextRgb);
 
         setHexCode(nextHexCode);
-        setRgb(hexCodeToRgb(nextHexCode));
+        setRgb(nextRgb);
+        setCmyk(nextCmyk);
       }
     };
 
@@ -74,14 +80,20 @@ export default function HexsPage() {
             <HexCodeInput
               hexCode={hexCode}
               setHexCode={setHexCode}
-              rgb={rgb}
               setRgb={setRgb}
+              setCmyk={setCmyk}
             />
             <RgbInput
               rgb={rgb}
               setRgb={setRgb}
-              hexCode={hexCode}
               setHexCode={setHexCode}
+              setCmyk={setCmyk}
+            />
+            <CmykInput
+              cmyk={cmyk}
+              setCmyk={setCmyk}
+              setHexCode={setHexCode}
+              setRgb={setRgb}
             />
           </section>
         </section>

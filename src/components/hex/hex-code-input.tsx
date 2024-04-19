@@ -7,26 +7,30 @@ import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
 
-import { RGB } from "@/lib/types";
-import { hexCodeToRgb, isHexCode } from "@/lib/utils";
+import { CMYK, RGB } from "@/lib/types";
+import { hexCodeToRgb, isHexCode, rgbToCmyk } from "@/lib/utils";
 
 interface HexCodeInputProps {
   hexCode: string;
   setHexCode: React.Dispatch<React.SetStateAction<string>>;
-  rgb: RGB;
   setRgb: React.Dispatch<React.SetStateAction<RGB>>;
+  setCmyk: React.Dispatch<React.SetStateAction<CMYK>>;
 }
 
 export default function HexCodeInput({
   hexCode,
   setHexCode,
   setRgb,
+  setCmyk,
 }: HexCodeInputProps) {
   const handleHexCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHexCode(`#${event.target.value.toUpperCase()}`);
 
     if (isHexCode(hexCode)) {
-      setRgb(hexCodeToRgb(hexCode));
+      const nextRgb = hexCodeToRgb(hexCode);
+
+      setRgb(nextRgb);
+      setCmyk(rgbToCmyk(nextRgb));
     }
   };
 

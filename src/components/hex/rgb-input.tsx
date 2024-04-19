@@ -7,20 +7,21 @@ import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
 
-import { RGB } from "@/lib/types";
-import { rgbToHexCode } from "@/lib/utils";
+import { CMYK, RGB } from "@/lib/types";
+import { rgbToCmyk, rgbToHexCode } from "@/lib/utils";
 
 interface RgbInputProps {
-  hexCode: string;
-  setHexCode: React.Dispatch<React.SetStateAction<string>>;
   rgb: RGB;
+  setHexCode: React.Dispatch<React.SetStateAction<string>>;
   setRgb: React.Dispatch<React.SetStateAction<RGB>>;
+  setCmyk: React.Dispatch<React.SetStateAction<CMYK>>;
 }
 
 export default function RgbInput({
   rgb: { r, g, b },
   setRgb,
   setHexCode,
+  setCmyk,
 }: RgbInputProps) {
   const handleRgbChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -32,6 +33,7 @@ export default function RgbInput({
     }));
 
     setHexCode(rgbToHexCode({ r, g, b }).toUpperCase());
+    setCmyk(rgbToCmyk({ r, g, b }));
   };
 
   const rgb: { id: string; value: number }[] = [
@@ -61,9 +63,7 @@ export default function RgbInput({
         </Fragment>
       ))}
       <span className="text-muted-foreground">)</span>
-      <CopyButton
-        text={`rgb(${r.toString()}, ${g.toString()}, ${b.toString()})`}
-      />
+      <CopyButton text={`rgb(${r}, ${g}, ${b})`} />
     </BubbleContainer>
   );
 }

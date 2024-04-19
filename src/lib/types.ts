@@ -17,6 +17,13 @@ export type XYZ = {
   z: number;
 };
 
+export type CMYK = {
+  c: number;
+  m: number;
+  y: number;
+  k: number;
+};
+
 export type MatrixItem = {
   matrix: number[][];
   rowStartIndex: number;

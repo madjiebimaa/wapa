@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import {
+  CMYK,
   Color,
   ColorSortingOption,
   GenerateGridArgs,
@@ -115,6 +116,32 @@ function xyzToLab(xyz: XYZ) {
 function rgbToLab(rgb: RGB) {
   const xyz = rgbToXyz(rgb);
   return xyzToLab(xyz);
+}
+
+export function rgbToCmyk(rgb: RGB): CMYK {
+  const r = rgb.r / 255;
+  const g = rgb.g / 255;
+  const b = rgb.b / 255;
+
+  const k = 1 - Math.max(r, g, b);
+  const c = (1 - r - k) / (1 - k);
+  const m = (1 - g - k) / (1 - k);
+  const y = (1 - b - k) / (1 - k);
+
+  return {
+    c: Math.round(c * 100),
+    m: Math.round(m * 100),
+    y: Math.round(y * 100),
+    k: Math.round(k * 100),
+  };
+}
+
+export function cmykToRgb({ c, m, y, k }: CMYK): RGB {
+  const r = 255 * (1 - c) * (1 - k);
+  const g = 255 * (1 - m) * (1 - k);
+  const b = 255 * (1 - y) * (1 - k);
+
+  return { r, g, b };
 }
 
 function colorDistance(rgb: RGB, comparedRgb: RGB) {
