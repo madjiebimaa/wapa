@@ -76,7 +76,7 @@ export default function HexsPage() {
               <BubbleText>Convert A Color</BubbleText>
             </BubbleContainer>
           </div>
-          <section className="flex flex-col gap-2">
+          <section className="flex flex-col gap-4">
             <HexCodeInput
               hexCode={hexCode}
               setHexCode={setHexCode}

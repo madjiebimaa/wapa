@@ -43,27 +43,31 @@ export default function RgbInput({
   ];
 
   return (
-    <BubbleContainer className="gap-1">
-      <BubbleText className="uppercase">rgb</BubbleText>
-      <span className="text-muted-foreground">rgb(</span>
-      {rgb.map(({ id, value }, index) => (
-        <Fragment key={id}>
-          <Input
-            name={id}
-            type="number"
-            min={0}
-            max={255}
-            className="w-[50px] rounded-full border-none text-secondary-foreground focus-visible:ring-offset-0"
-            value={value}
-            onChange={handleRgbChange}
-          />
-          {index !== rgb.length - 1 && (
-            <span className="text-muted-foreground">{", "}</span>
-          )}
-        </Fragment>
-      ))}
-      <span className="text-muted-foreground">)</span>
-      <CopyButton text={`rgb(${r}, ${g}, ${b})`} />
-    </BubbleContainer>
+    <div className="flex flex-col gap-1 md:flex-row">
+      <BubbleContainer>
+        <BubbleText className="uppercase">rgb</BubbleText>
+      </BubbleContainer>
+      <BubbleContainer className="gap-1">
+        <span className="pl-2 text-xs text-muted-foreground">rgb(</span>
+        {rgb.map(({ id, value }, index) => (
+          <Fragment key={id}>
+            <Input
+              name={id}
+              type="number"
+              min={0}
+              max={255}
+              className="w-[40px] rounded-full border-none p-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
+              value={value}
+              onChange={handleRgbChange}
+            />
+            {index !== rgb.length - 1 && (
+              <span className="text-xs text-muted-foreground">{", "}</span>
+            )}
+          </Fragment>
+        ))}
+        <span className="text-xs text-muted-foreground">)</span>
+        <CopyButton text={`rgb(${r}, ${g}, ${b})`} />
+      </BubbleContainer>
+    </div>
   );
 }

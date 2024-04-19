@@ -46,27 +46,31 @@ export default function CmykInput({
   ];
 
   return (
-    <BubbleContainer className="gap-1">
-      <BubbleText className="uppercase">cmyk</BubbleText>
-      <span className="text-muted-foreground">cmyk(</span>
-      {cmyk.map(({ id, value }, index) => (
-        <Fragment key={id}>
-          <Input
-            name={id}
-            type="number"
-            min={0}
-            max={255}
-            className="w-[45px] rounded-full border-none text-secondary-foreground focus-visible:ring-offset-0"
-            value={value}
-            onChange={handleCmykChange}
-          />
-          {index !== cmyk.length - 1 && (
-            <span className="text-muted-foreground">{", "}</span>
-          )}
-        </Fragment>
-      ))}
-      <span className="text-muted-foreground">)</span>
-      <CopyButton text={`cmyk(${c}, ${m}, ${y}, ${k})`} />
-    </BubbleContainer>
+    <div className="flex flex-col gap-1 md:flex-row">
+      <BubbleContainer>
+        <BubbleText className="uppercase">cmyk</BubbleText>
+      </BubbleContainer>
+      <BubbleContainer className="gap-1">
+        <span className="pl-2 text-xs text-muted-foreground">cmyk(</span>
+        {cmyk.map(({ id, value }, index) => (
+          <Fragment key={id}>
+            <Input
+              name={id}
+              type="number"
+              min={0}
+              max={255}
+              className="w-[35px] rounded-full border-none p-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
+              value={value}
+              onChange={handleCmykChange}
+            />
+            {index !== cmyk.length - 1 && (
+              <span className="text-xs text-muted-foreground">{", "}</span>
+            )}
+          </Fragment>
+        ))}
+        <span className="text-xs text-muted-foreground">)</span>
+        <CopyButton text={`cmyk(${c}, ${m}, ${y}, ${k})`} />
+      </BubbleContainer>
+    </div>
   );
 }
