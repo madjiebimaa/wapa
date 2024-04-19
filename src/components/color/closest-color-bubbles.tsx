@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import ClientOnly from "@/components/global/client-only";
+
 import { Bubble, Color } from "@/lib/types";
 import { generateGrid, getClosestColors } from "@/lib/utils";
 
@@ -27,6 +29,7 @@ export default function ClosestColorBubbles({
     itemSizes: bubbleSizes,
     numberOfItems: numberOfBubbles,
   });
+
   const bubbles: Bubble[] = grid
     .sort((a, b) => {
       const sizeA = a.gridRowEnd - a.gridRowStart;
@@ -46,18 +49,20 @@ export default function ClosestColorBubbles({
     });
 
   return (
-    <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2">
-      {bubbles.map((bubble) => (
-        <Link
-          key={bubble.color.id}
-          href={`/colors/${bubble.color.id}`}
-          style={{
-            ...bubble.position,
-            backgroundColor: bubble.color.hexCode,
-          }}
-          className="h-full w-full rounded-full shadow-md transition-transform duration-300 ease-in hover:scale-110 hover:transition-transform hover:duration-500 hover:ease-out"
-        />
-      ))}
-    </section>
+    <ClientOnly>
+      <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2">
+        {bubbles.map((bubble) => (
+          <Link
+            key={bubble.color.id}
+            href={`/colors/${bubble.color.id}`}
+            style={{
+              ...bubble.position,
+              backgroundColor: bubble.color.hexCode,
+            }}
+            className="h-full w-full rounded-full shadow-md transition-transform duration-300 ease-in hover:scale-110 hover:transition-transform hover:duration-500 hover:ease-out"
+          />
+        ))}
+      </section>
+    </ClientOnly>
   );
 }

@@ -7,7 +7,6 @@ import ClosestColorBubbles from "@/components/color/closest-color-bubbles";
 import BubbleButton from "@/components/global/bubble-button";
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
-import ClinetOnly from "@/components/global/client-only";
 import CopyButton from "@/components/global/copy-button";
 import LoveButton from "@/components/global/love-button";
 
@@ -61,9 +60,7 @@ export default function ColorPage({
           </BubbleContainer>
         </div>
       </section>
-      <ClinetOnly>
-        <ClosestColorBubbles color={currentColor} colors={colors} />
-      </ClinetOnly>
+      <ClosestColorBubbles color={currentColor} colors={colors} />
     </main>
   );
 }

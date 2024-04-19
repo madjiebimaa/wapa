@@ -38,7 +38,7 @@ export function applyColorSorting(
   }
 }
 
-export function hexCodeToRGB(hexCode: string): RGB {
+export function hexCodeToRgb(hexCode: string): RGB {
   const formattedHexCode = hexCode.replace("#", "");
   const baseNumber = 16;
 
@@ -56,7 +56,7 @@ export function toGrayScale({ r, g, b }: RGB) {
 export function getOppositeContrast(
   hexCode: string,
 ): "text-foreground" | "text-background" {
-  return toGrayScale(hexCodeToRGB(hexCode)) > 128
+  return toGrayScale(hexCodeToRgb(hexCode)) > 128
     ? "text-foreground"
     : "text-background";
 }
@@ -66,7 +66,7 @@ function numberToHexCode(num: number) {
   return hex.length === 1 ? `0${hex}` : hex;
 }
 
-export function RGBToHexCode({ r, g, b }: RGB): string {
+export function rgbToHexCode({ r, g, b }: RGB): string {
   const rHexCode = numberToHexCode(r);
   const gHexCode = numberToHexCode(g);
   const bHexCode = numberToHexCode(b);
@@ -74,12 +74,12 @@ export function RGBToHexCode({ r, g, b }: RGB): string {
   return `#${rHexCode}${gHexCode}${bHexCode}`;
 }
 
-function normalizeRGB({ r, g, b }: RGB) {
+function normalizeRgb({ r, g, b }: RGB) {
   return { nr: r / 255, ng: g / 255, nb: b / 255 };
 }
 
-function RGBToXYZ(rgb: RGB) {
-  const { nr, ng, nb } = normalizeRGB(rgb);
+function rgbToXyz(rgb: RGB) {
+  const { nr, ng, nb } = normalizeRgb(rgb);
 
   const x = 0.4124564 * nr + 0.3575761 * ng + 0.1804375 * nb;
   const y = 0.2126729 * nr + 0.7151522 * ng + 0.072175 * nb;
@@ -88,22 +88,22 @@ function RGBToXYZ(rgb: RGB) {
   return { x, y, z };
 }
 
-function normalizeXYZ({ x, y, z }: XYZ) {
+function normalizeXyz({ x, y, z }: XYZ) {
   return { nx: x / 0.9642, ny: y / 1.0, nz: z / 0.8249 };
 }
 
-function XYZValueToLabColorSpace(normalizeValue: number) {
+function xyzValueToLabColorSpace(normalizeValue: number) {
   return normalizeValue > 0.008856
     ? Math.pow(normalizeValue, 1 / 3)
     : (903.3 * normalizeValue + 16) / 116;
 }
 
-function XYZToLab(xyz: XYZ) {
-  const { nx, ny, nz } = normalizeXYZ(xyz);
+function xyzToLab(xyz: XYZ) {
+  const { nx, ny, nz } = normalizeXyz(xyz);
 
-  const fx = XYZValueToLabColorSpace(nx);
-  const fy = XYZValueToLabColorSpace(ny);
-  const fz = XYZValueToLabColorSpace(nz);
+  const fx = xyzValueToLabColorSpace(nx);
+  const fy = xyzValueToLabColorSpace(ny);
+  const fz = xyzValueToLabColorSpace(nz);
 
   const L = Math.max(0, 116 * fy - 16);
   const a = (fx - fy) * 500;
@@ -112,14 +112,14 @@ function XYZToLab(xyz: XYZ) {
   return { L, a, b };
 }
 
-function RGBToLab(rgb: RGB) {
-  const xyz = RGBToXYZ(rgb);
-  return XYZToLab(xyz);
+function rgbToLab(rgb: RGB) {
+  const xyz = rgbToXyz(rgb);
+  return xyzToLab(xyz);
 }
 
 function colorDistance(rgb: RGB, comparedRgb: RGB) {
-  const { L, a, b } = RGBToLab(rgb);
-  const { L: comparedL, a: comparedA, b: comparedB } = RGBToLab(comparedRgb);
+  const { L, a, b } = rgbToLab(rgb);
+  const { L: comparedL, a: comparedA, b: comparedB } = rgbToLab(comparedRgb);
 
   return Math.sqrt(
     Math.pow(L - comparedL, 2) +
@@ -138,8 +138,8 @@ export function getClosestColors({
     .map((comparedColor) => ({
       ...comparedColor,
       distance: colorDistance(
-        hexCodeToRGB(color.hexCode),
-        hexCodeToRGB(comparedColor.hexCode),
+        hexCodeToRgb(color.hexCode),
+        hexCodeToRgb(comparedColor.hexCode),
       ),
     }))
     .sort((a, b) => a.distance - b.distance)
@@ -152,7 +152,7 @@ function generateEmptyMatrix(size: number): Matrix {
     .map(() => Array(size).fill(0));
 }
 
-function getRandomInt(min: number, max: number): number {
+export function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -181,6 +181,10 @@ function generateItem(size: number, matrixSize: number): MatrixItem {
   );
 
   return { rowStartIndex, columnStartIndex, size, matrix: insertedMatrix };
+}
+
+export function isHexCode(hexCode: string): boolean {
+  return hexCode.length === 7;
 }
 
 function isItemOverlap(item: MatrixItem | null, matrix: Matrix) {

@@ -1,13 +1,12 @@
 "use client";
 
 import { useIsClient } from "@uidotdev/usehooks";
-import React from "react";
 
-interface ClinetOnlyProps {
+interface ClientOnlyProps {
   children: React.ReactNode;
 }
 
-export default function ClinetOnly({ children }: ClinetOnlyProps) {
+export default function ClientOnly({ children }: ClientOnlyProps) {
   const isClient = useIsClient();
 
   return isClient ? children : null;
