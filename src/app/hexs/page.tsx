@@ -72,7 +72,7 @@ export default function HexsPage() {
             : DEFAULT_BACKGROUND_COLOR,
         }}
         className={cn(
-          "flex h-screen flex-col p-4",
+          "flex h-dvh flex-col p-4",
           isHexCode(hexCode) && getOppositeContrast(hexCode),
         )}
       >

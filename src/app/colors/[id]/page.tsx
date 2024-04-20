@@ -29,7 +29,7 @@ export default function ColorPage({
         backgroundColor: currentColor.hexCode,
       }}
       className={cn(
-        "flex h-screen flex-col gap-4 p-4",
+        "flex h-dvh flex-col gap-4 p-4",
         getOppositeContrast(currentColor.hexCode),
       )}
     >

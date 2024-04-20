@@ -25,7 +25,7 @@ export default function HomePage() {
         backgroundColor: selectedBackgroundColor,
       }}
       className={cn(
-        "flex h-screen flex-col transition-colors duration-500 md:flex-row",
+        "flex h-dvh flex-col transition-colors duration-500 md:flex-row",
         getOppositeContrast(selectedBackgroundColor),
       )}
     >
