@@ -1,41 +1,51 @@
 "use client";
 
 import { Fragment } from "react";
+import { UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
 
-import { CMYK, RGB } from "@/lib/types";
-import { cmykToRgb, rgbToHexCode } from "@/lib/utils";
+import { cmykToRgb, getCmykAttribute, rgbToHexCode } from "@/lib/utils";
 
 interface CmykInputProps {
-  cmyk: CMYK;
-  setHexCode: React.Dispatch<React.SetStateAction<string>>;
-  setRgb: React.Dispatch<React.SetStateAction<RGB>>;
-  setCmyk: React.Dispatch<React.SetStateAction<CMYK>>;
+  form: UseFormReturn<
+    {
+      hexCode: string;
+      rgb: {
+        r: number;
+        g: number;
+        b: number;
+      };
+      cmyk: {
+        c: number;
+        m: number;
+        y: number;
+        k: number;
+      };
+    },
+    any,
+    undefined
+  >;
 }
 
-export default function CmykInput({
-  cmyk: { c, m, y, k },
-  setRgb,
-  setHexCode,
-  setCmyk,
-}: CmykInputProps) {
+export default function CmykInput({ form }: CmykInputProps) {
+  const { c, m, y, k } = form.watch("cmyk");
+
   const handleCmykChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    const cmykValue = parseInt(value);
-    setCmyk((prevState) => ({
-      ...prevState,
-      [name]: cmykValue,
-    }));
+    form.setValue(
+      getCmykAttribute(name as "c" | "m" | "y" | "k"),
+      parseInt(value),
+    );
 
     const nextRgb = cmykToRgb({ c, m, y, k });
 
-    setRgb(nextRgb);
-    setHexCode(rgbToHexCode(nextRgb).toUpperCase());
+    form.setValue("rgb", nextRgb);
+    form.setValue("hexCode", rgbToHexCode(nextRgb).toUpperCase());
   };
 
   const cmyk: { id: string; value: number }[] = [

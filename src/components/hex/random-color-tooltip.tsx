@@ -1,7 +1,8 @@
 "use client";
 
-import { Info } from "lucide-react";
-import { useEffect } from "react";
+import { Dices, Info } from "lucide-react";
+import { useCallback, useEffect } from "react";
+import { UseFormReturn } from "react-hook-form";
 
 import BubbleButton from "@/components/global/bubble-button";
 import BubbleContainer from "@/components/global/bubble-container";
@@ -12,45 +13,62 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { CMYK, RGB } from "@/lib/types";
+import useDevices from "@/hooks/useDevices";
 import { getRandomInt, hexCodeToRgb, rgbToCmyk } from "@/lib/utils";
 import { useColors } from "@/store/color";
 
 interface RandomColorTooltipProps {
-  setHexCode: React.Dispatch<React.SetStateAction<string>>;
-  setRgb: React.Dispatch<React.SetStateAction<RGB>>;
-  setCmyk: React.Dispatch<React.SetStateAction<CMYK>>;
+  form: UseFormReturn<
+    {
+      hexCode: string;
+      rgb: {
+        r: number;
+        g: number;
+        b: number;
+      };
+      cmyk: {
+        c: number;
+        m: number;
+        y: number;
+        k: number;
+      };
+    },
+    any,
+    undefined
+  >;
 }
 
-export default function RandomColorTooltip({
-  setHexCode,
-  setRgb,
-  setCmyk,
-}: RandomColorTooltipProps) {
+export default function RandomColorTooltip({ form }: RandomColorTooltipProps) {
+  const { isLargeDevice } = useDevices();
   const colors = useColors();
-  const randomizeHexCode = colors[getRandomInt(0, colors.length - 1)].hexCode;
+
+  const randomColor = useCallback(() => {
+    const nextHexCode = colors[getRandomInt(0, colors.length - 1)].hexCode;
+    const nextRgb = hexCodeToRgb(nextHexCode);
+    const nextCmyk = rgbToCmyk(nextRgb);
+
+    form.setValue("hexCode", nextHexCode);
+    form.setValue("rgb", nextRgb);
+    form.setValue("cmyk", nextCmyk);
+  }, [colors, form]);
 
   useEffect(() => {
     const handleRandomizeHexCode = (event: KeyboardEvent) => {
       if (event.altKey && event.key === "r") {
-        const nextHexCode = randomizeHexCode;
-        const nextRgb = hexCodeToRgb(nextHexCode);
-        const nextCmyk = rgbToCmyk(nextRgb);
-
-        setHexCode(nextHexCode);
-        setRgb(nextRgb);
-        setCmyk(nextCmyk);
+        randomColor();
       }
     };
 
-    document.addEventListener("keydown", handleRandomizeHexCode);
+    isLargeDevice &&
+      document.addEventListener("keydown", handleRandomizeHexCode);
 
     return () => {
-      document.removeEventListener("keydown", handleRandomizeHexCode);
+      isLargeDevice &&
+        document.removeEventListener("keydown", handleRandomizeHexCode);
     };
-  }, [randomizeHexCode, setCmyk, setHexCode, setRgb]);
+  }, [form, randomColor, isLargeDevice]);
 
-  return (
+  return isLargeDevice ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -74,5 +92,11 @@ export default function RandomColorTooltip({
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  ) : (
+    <BubbleContainer>
+      <BubbleButton onClick={() => randomColor()}>
+        <Dices className="size-4 shrink-0" />
+      </BubbleButton>
+    </BubbleContainer>
   );
 }

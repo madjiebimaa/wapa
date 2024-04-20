@@ -1,36 +1,55 @@
 "use client";
 
 import { Hash } from "lucide-react";
+import { UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
 
-import { CMYK, RGB } from "@/lib/types";
 import { hexCodeToRgb, isHexCode, rgbToCmyk } from "@/lib/utils";
 
 interface HexCodeInputProps {
-  hexCode: string;
-  setHexCode: React.Dispatch<React.SetStateAction<string>>;
-  setRgb: React.Dispatch<React.SetStateAction<RGB>>;
-  setCmyk: React.Dispatch<React.SetStateAction<CMYK>>;
+  form: UseFormReturn<
+    {
+      hexCode: string;
+      rgb: {
+        r: number;
+        g: number;
+        b: number;
+      };
+      cmyk: {
+        c: number;
+        m: number;
+        y: number;
+        k: number;
+      };
+    },
+    any,
+    undefined
+  >;
 }
 
-export default function HexCodeInput({
-  hexCode,
-  setHexCode,
-  setRgb,
-  setCmyk,
-}: HexCodeInputProps) {
+export default function HexCodeInput({ form }: HexCodeInputProps) {
+  const hexCode = form.watch("hexCode");
+
   const handleHexCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHexCode(`#${event.target.value.toUpperCase()}`);
+    const { value } = event.target;
 
-    if (isHexCode(hexCode)) {
-      const nextRgb = hexCodeToRgb(hexCode);
+    const nextHexCode = `#${value.toUpperCase()}`;
 
-      setRgb(nextRgb);
-      setCmyk(rgbToCmyk(nextRgb));
+    form.setValue("hexCode", nextHexCode);
+
+    if (isHexCode(nextHexCode) || value.length === 0) {
+      const nextRgb = hexCodeToRgb(nextHexCode);
+      const nextCmyk = rgbToCmyk(nextRgb);
+
+      form.setValue("rgb", value.length !== 0 ? nextRgb : { r: 0, g: 0, b: 0 });
+      form.setValue(
+        "cmyk",
+        value.length !== 0 ? nextCmyk : { c: 0, m: 0, y: 0, k: 0 },
+      );
     }
   };
 

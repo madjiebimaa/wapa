@@ -310,3 +310,15 @@ export function generateGrid(args: GenerateGridArgs) {
 
   return grid;
 }
+
+export function getRgbAttribute(
+  name: "r" | "g" | "b",
+): "rgb.r" | "rgb.g" | "rgb.b" {
+  return `rgb.${name}`;
+}
+
+export function getCmykAttribute(
+  name: "c" | "m" | "y" | "k",
+): "cmyk.c" | "cmyk.m" | "cmyk.y" | "cmyk.k" {
+  return `cmyk.${name}`;
+}

@@ -1,39 +1,45 @@
 "use client";
 
 import { Fragment } from "react";
+import { UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
 
-import { CMYK, RGB } from "@/lib/types";
-import { rgbToCmyk, rgbToHexCode } from "@/lib/utils";
+import { getRgbAttribute, rgbToCmyk, rgbToHexCode } from "@/lib/utils";
 
 interface RgbInputProps {
-  rgb: RGB;
-  setHexCode: React.Dispatch<React.SetStateAction<string>>;
-  setRgb: React.Dispatch<React.SetStateAction<RGB>>;
-  setCmyk: React.Dispatch<React.SetStateAction<CMYK>>;
+  form: UseFormReturn<
+    {
+      hexCode: string;
+      rgb: {
+        r: number;
+        g: number;
+        b: number;
+      };
+      cmyk: {
+        c: number;
+        m: number;
+        y: number;
+        k: number;
+      };
+    },
+    any,
+    undefined
+  >;
 }
 
-export default function RgbInput({
-  rgb: { r, g, b },
-  setRgb,
-  setHexCode,
-  setCmyk,
-}: RgbInputProps) {
+export default function RgbInput({ form }: RgbInputProps) {
+  const { r, g, b } = form.watch("rgb");
+
   const handleRgbChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    const rgbValue = parseInt(value);
-    setRgb((prevState) => ({
-      ...prevState,
-      [name]: rgbValue < 0 ? 0 : rgbValue > 255 ? 255 : rgbValue,
-    }));
-
-    setHexCode(rgbToHexCode({ r, g, b }).toUpperCase());
-    setCmyk(rgbToCmyk({ r, g, b }));
+    form.setValue(getRgbAttribute(name as "r" | "g" | "b"), parseInt(value));
+    form.setValue("hexCode", rgbToHexCode({ r, g, b }).toUpperCase());
+    form.setValue("cmyk", rgbToCmyk({ r, g, b }));
   };
 
   const rgb: { id: string; value: number }[] = [

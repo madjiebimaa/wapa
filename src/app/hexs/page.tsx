@@ -2,18 +2,27 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import BubbleButton from "@/components/global/bubble-button";
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
 import ClientOnly from "@/components/global/client-only";
-import CmykInput from "@/components/hex/cmyx-input";
+// import CmykInput from "@/components/hex/cmyx-input";
 import HexCodeInput from "@/components/hex/hex-code-input";
-import RgbInput from "@/components/hex/rgb-input";
-
 import RandomColorTooltip from "@/components/hex/random-color-tooltip";
-import useDevices from "@/hooks/useDevices";
+// import RgbInput from "@/components/hex/rgb-input";
+import CmykInput from "@/components/hex/cmyx-input";
+import RgbInput from "@/components/hex/rgb-input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+
 import { DEFAULT_BACKGROUND_COLOR } from "@/lib/constants";
 import {
   cn,
@@ -22,13 +31,37 @@ import {
   isHexCode,
   rgbToCmyk,
 } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const FormSchema = z.object({
+  hexCode: z.string().max(7),
+  rgb: z.object({
+    r: z.number().min(0).max(255),
+    g: z.number().min(0).max(255),
+    b: z.number().min(0).max(255),
+  }),
+  cmyk: z.object({
+    c: z.number().min(0).max(255),
+    m: z.number().min(0).max(255),
+    y: z.number().min(0).max(255),
+    k: z.number().min(0).max(255),
+  }),
+});
 
 export default function HexsPage() {
-  const [hexCode, setHexCode] = useState(DEFAULT_BACKGROUND_COLOR);
-  const [rgb, setRgb] = useState(hexCodeToRgb(hexCode));
-  const [cmyk, setCmyk] = useState(rgbToCmyk(rgb));
   const router = useRouter();
-  const { isLargeDevice } = useDevices();
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      hexCode: DEFAULT_BACKGROUND_COLOR,
+      rgb: hexCodeToRgb(DEFAULT_BACKGROUND_COLOR),
+      cmyk: rgbToCmyk(hexCodeToRgb(DEFAULT_BACKGROUND_COLOR)),
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof FormSchema>) => {};
+
+  const hexCode = form.watch("hexCode");
 
   return (
     <ClientOnly>
@@ -55,34 +88,48 @@ export default function HexsPage() {
                 <BubbleText>Convert A Color</BubbleText>
               </BubbleContainer>
             </div>
-            {isLargeDevice && (
-              <RandomColorTooltip
-                setHexCode={setHexCode}
-                setRgb={setRgb}
-                setCmyk={setCmyk}
+            <RandomColorTooltip form={form} />
+          </section>
+          <Form {...form}>
+            <form className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="hexCode"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="sr-only">Hex Code</FormLabel>
+                    <FormControl>
+                      <HexCodeInput form={form} />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
-            )}
-          </section>
-          <section className="flex flex-col gap-4">
-            <HexCodeInput
-              hexCode={hexCode}
-              setHexCode={setHexCode}
-              setRgb={setRgb}
-              setCmyk={setCmyk}
-            />
-            <RgbInput
-              rgb={rgb}
-              setRgb={setRgb}
-              setHexCode={setHexCode}
-              setCmyk={setCmyk}
-            />
-            <CmykInput
-              cmyk={cmyk}
-              setCmyk={setCmyk}
-              setHexCode={setHexCode}
-              setRgb={setRgb}
-            />
-          </section>
+              <FormField
+                control={form.control}
+                name="rgb"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="sr-only">RGB</FormLabel>
+                    <FormControl>
+                      <RgbInput form={form} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cmyk"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="sr-only">CMYK</FormLabel>
+                    <FormControl>
+                      <CmykInput form={form} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
         </section>
       </main>
     </ClientOnly>
