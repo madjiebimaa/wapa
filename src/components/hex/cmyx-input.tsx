@@ -79,7 +79,7 @@ export default function CmykInput({ form }: CmykInputProps) {
           </Fragment>
         ))}
         <span className="text-xs text-muted-foreground">)</span>
-        <CopyButton text={`cmyk(${c}, ${m}, ${y}, ${k})`} />
+        <CopyButton type="button" text={`cmyk(${c}, ${m}, ${y}, ${k})`} />
       </BubbleContainer>
     </div>
   );

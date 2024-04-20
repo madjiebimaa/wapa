@@ -72,7 +72,7 @@ export default function RgbInput({ form }: RgbInputProps) {
           </Fragment>
         ))}
         <span className="text-xs text-muted-foreground">)</span>
-        <CopyButton text={`rgb(${r}, ${g}, ${b})`} />
+        <CopyButton type="button" text={`rgb(${r}, ${g}, ${b})`} />
       </BubbleContainer>
     </div>
   );

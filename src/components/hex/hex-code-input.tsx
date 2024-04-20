@@ -68,7 +68,7 @@ export default function HexCodeInput({ form }: HexCodeInputProps) {
           value={hexCode.slice(1)}
           onChange={handleHexCodeChange}
         />
-        <CopyButton text={hexCode} />
+        <CopyButton type="button" text={hexCode} />
       </BubbleContainer>
     </div>
   );
