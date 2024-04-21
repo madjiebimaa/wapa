@@ -9,8 +9,8 @@ import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import LoveButton from "@/components/global/love-button";
-
 import HexDetails from "@/components/hex/hex-details";
+
 import { cn, getOppositeContrast, hexCodeToRgb, rgbToCmyk } from "@/lib/utils";
 import { useColors } from "@/store/color";
 

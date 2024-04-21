@@ -1,7 +1,8 @@
 import { Fragment } from "react";
 
 import BubbleContainer from "@/components/global/bubble-container";
-import { Progress } from "@/components/ui/progress";
+import Counter from "@/components/global/counter";
+import HexBar from "@/components/hex/hex-bar";
 
 import { CMYK, RGB } from "@/lib/types";
 
@@ -32,7 +33,7 @@ export default function HexDetails({
       <div className="flex flex-col gap-1">
         {rgb.map(({ id, value }) => (
           <BubbleContainer key={id} className="w-full">
-            <Progress value={(value / 255) * 100} className="h-2 w-full" />
+            <HexBar value={value} />
           </BubbleContainer>
         ))}
       </div>
@@ -40,14 +41,14 @@ export default function HexDetails({
         {rgb.map(({ id, label, value }) => (
           <Fragment key={id}>
             <span className="font-medium uppercase">{label}</span>
-            <span className="font-medium">{value}</span>
+            <Counter from={0} to={value} className="font-medium" />
           </Fragment>
         ))}
       </div>
       <section className="flex flex-col items-end gap-3 pr-3">
         {cmyk.map(({ id, label, value }) => (
           <div key={id} className="relative">
-            <span className="font-medium">{value}</span>
+            <Counter from={0} to={value} className="h-6 font-medium" />
             <span className="absolute -right-3 -top-3 text-xs font-medium uppercase">
               {label}
             </span>
