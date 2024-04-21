@@ -22,15 +22,15 @@ interface RandomColorTooltipProps {
     {
       hexCode: string;
       rgb: {
-        r: number;
-        g: number;
-        b: number;
+        r: number | null;
+        g: number | null;
+        b: number | null;
       };
       cmyk: {
-        c: number;
-        m: number;
-        y: number;
-        k: number;
+        c: number | null;
+        m: number | null;
+        y: number | null;
+        k: number | null;
       };
     },
     any,

@@ -1,37 +1,52 @@
 "use client";
 
 import { Hash } from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
+import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
-import BubbleText from "@/components/global/bubble-text";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
-
-import { hexCodeToRgb, isHexCode, rgbToCmyk } from "@/lib/utils";
+import { hexCodeToRgb, isValidHexCode, rgbToCmyk } from "@/lib/utils";
 
 interface HexCodeInputProps {
   form: UseFormReturn<
     {
       hexCode: string;
       rgb: {
-        r: number;
-        g: number;
-        b: number;
+        r: number | null;
+        g: number | null;
+        b: number | null;
       };
       cmyk: {
-        c: number;
-        m: number;
-        y: number;
-        k: number;
+        c: number | null;
+        m: number | null;
+        y: number | null;
+        k: number | null;
       };
     },
     any,
     undefined
   >;
+  field: ControllerRenderProps<
+    {
+      hexCode: string;
+      rgb: {
+        r: number | null;
+        g: number | null;
+        b: number | null;
+      };
+      cmyk: {
+        c: number | null;
+        m: number | null;
+        y: number | null;
+        k: number | null;
+      };
+    },
+    "hexCode"
+  >;
 }
 
-export default function HexCodeInput({ form }: HexCodeInputProps) {
+export default function HexCodeInput({ form, field }: HexCodeInputProps) {
   const hexCode = form.watch("hexCode");
 
   const handleHexCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +54,9 @@ export default function HexCodeInput({ form }: HexCodeInputProps) {
 
     const nextHexCode = `#${value.toUpperCase()}`;
 
-    form.setValue("hexCode", nextHexCode);
+    form.setValue("hexCode", nextHexCode, { shouldValidate: true });
 
-    if (isHexCode(nextHexCode) || value.length === 0) {
+    if (isValidHexCode(nextHexCode)) {
       const nextRgb = hexCodeToRgb(nextHexCode);
       const nextCmyk = rgbToCmyk(nextRgb);
 
@@ -54,22 +69,19 @@ export default function HexCodeInput({ form }: HexCodeInputProps) {
   };
 
   return (
-    <div className="flex flex-col gap-1 md:flex-row">
-      <BubbleContainer>
-        <BubbleText className="uppercase">hex</BubbleText>
-      </BubbleContainer>
-      <BubbleContainer className="relative gap-1">
-        <Hash className="absolute left-4 top-4 size-4 shrink-0 text-muted-foreground" />
-        <Input
-          name="hex-code"
-          type="text"
-          maxLength={6}
-          className="w-[100px] rounded-full border-none py-2 pl-8 pr-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
-          value={hexCode.slice(1)}
-          onChange={handleHexCodeChange}
-        />
-        <CopyButton type="button" text={hexCode} />
-      </BubbleContainer>
-    </div>
+    <BubbleContainer className="relative gap-1">
+      <Hash className="absolute left-4 top-4 size-4 shrink-0 text-muted-foreground" />
+      <Input
+        {...field}
+        id="hexCode"
+        type="text"
+        maxLength={6}
+        autoComplete="off"
+        className="w-[100px] rounded-full border-none py-2 pl-8 pr-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
+        value={field.value.slice(1)}
+        onChange={handleHexCodeChange}
+      />
+      <CopyButton type="button" text={hexCode} />
+    </BubbleContainer>
   );
 }

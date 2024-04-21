@@ -1,8 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { CMYK } from "@/lib/types";
+
 import {
-  CMYK,
   Color,
   ColorSortingOption,
   GenerateGridArgs,
@@ -134,6 +135,8 @@ export function rgbToCmyk(rgb: RGB): CMYK {
     y: Math.round(y * 100),
     k: Math.round(k * 100),
   };
+
+  return { c, m, y, k };
 }
 
 export function cmykToRgb({ c, m, y, k }: CMYK): RGB {
@@ -141,7 +144,7 @@ export function cmykToRgb({ c, m, y, k }: CMYK): RGB {
   const g = 255 * (1 - m) * (1 - k);
   const b = 255 * (1 - y) * (1 - k);
 
-  return { r, g, b };
+  return { r: Math.round(r), g: Math.round(g), b: Math.round(b) };
 }
 
 function colorDistance(rgb: RGB, comparedRgb: RGB) {
@@ -210,8 +213,23 @@ function generateItem(size: number, matrixSize: number): MatrixItem {
   return { rowStartIndex, columnStartIndex, size, matrix: insertedMatrix };
 }
 
-export function isHexCode(hexCode: string): boolean {
-  return hexCode.length === 7;
+export function isValidHexCode(hexCode: string): boolean {
+  return /^#[0-9a-fA-F]{6}$/.test(hexCode);
+}
+
+const isValidRgbRange = (value: number) => value >= 0 && value <= 255;
+export function isValidRgb({ r, g, b }: RGB) {
+  return isValidRgbRange(r) && isValidRgbRange(g) && isValidRgbRange(b);
+}
+
+const isValidCmykRange = (value: number) => value >= 0 && value <= 100;
+export function isValidCmyk({ c, m, y, k }: CMYK) {
+  return (
+    isValidCmykRange(c) &&
+    isValidCmykRange(m) &&
+    isValidCmykRange(y) &&
+    isValidCmykRange(k)
+  );
 }
 
 function isItemOverlap(item: MatrixItem | null, matrix: Matrix) {
@@ -321,4 +339,11 @@ export function getCmykAttribute(
   name: "c" | "m" | "y" | "k",
 ): "cmyk.c" | "cmyk.m" | "cmyk.y" | "cmyk.k" {
   return `cmyk.${name}`;
+}
+
+export function parseMaxNumber(value: string, max: number): number {
+  let parsedValue = parseInt(value);
+  let result = value;
+
+  return parseInt(parsedValue > max ? value.slice(-1) : result);
 }
