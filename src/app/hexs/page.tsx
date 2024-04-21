@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
+import { Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -82,8 +82,8 @@ export default function HexsPage() {
           <section className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <BubbleContainer>
-                <BubbleButton onClick={() => router.back()}>
-                  <ArrowLeft className="size-4 shrink-0" />
+                <BubbleButton onClick={() => router.push("/")}>
+                  <Home className="size-4 shrink-0" />
                 </BubbleButton>
               </BubbleContainer>
               <BubbleContainer>
