@@ -105,7 +105,7 @@ export default function CmykInput({ form }: CmykInputProps) {
             min={0}
             max={255}
             className="w-[35px] rounded-full border-none p-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
-            value={value !== null ? value : ""}
+            value={value !== null ? Number(value).toString() : ""}
             onChange={handleCmykChange}
           />
           {index !== cmykFields.length - 1 && (

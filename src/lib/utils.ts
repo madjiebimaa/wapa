@@ -1,7 +1,6 @@
+import { CMYK } from "@/lib/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-import { CMYK } from "@/lib/types";
 
 import {
   Color,
@@ -345,5 +344,7 @@ export function parseMaxNumber(value: string, max: number): number {
   let parsedValue = parseInt(value);
   let result = value;
 
-  return parseInt(parsedValue > max ? value.slice(-1) : result);
+  return parseInt(
+    parsedValue > max || value.slice(0, 1) === "0" ? value.slice(-1) : result,
+  );
 }

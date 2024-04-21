@@ -98,7 +98,7 @@ export default function RgbInput({ form, field }: RgbInputProps) {
             min={0}
             max={255}
             className="w-[40px] rounded-full border-none p-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
-            value={value !== null ? value : ""}
+            value={value !== null ? Number(value).toString() : ""}
             onChange={handleRgbChange}
           />
           {index !== rgbFields.length - 1 && (
