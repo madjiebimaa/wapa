@@ -11,6 +11,7 @@ import CopyButton from "@/components/global/copy-button";
 import LoveButton from "@/components/global/love-button";
 import HexDetails from "@/components/hex/hex-details";
 
+import ClientOnly from "@/components/global/client-only";
 import { cn, getOppositeContrast, hexCodeToRgb, rgbToCmyk } from "@/lib/utils";
 import { useColors } from "@/store/color";
 
@@ -38,7 +39,7 @@ export default function ColorPage({
         backgroundColor: currentColor.hexCode,
       }}
       className={cn(
-        "flex h-dvh flex-col p-4 md:flex-row",
+        "flex h-dvh flex-col gap-8 p-4 md:flex-row",
         getOppositeContrast(currentColor.hexCode),
       )}
     >
@@ -89,7 +90,9 @@ export default function ColorPage({
         </section>
         <HexDetails rgb={currentColorRgb} cmyk={currentColorCmyk} />
       </section>
-      <ClosestColorBubbles color={currentColor} colors={colors} />
+      <ClientOnly>
+        <ClosestColorBubbles color={currentColor} colors={colors} />
+      </ClientOnly>
     </main>
   );
 }

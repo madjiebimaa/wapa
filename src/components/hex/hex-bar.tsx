@@ -18,7 +18,8 @@ export default function HexBar({ value }: HexBarProps) {
     if (!counter) return;
 
     const controls = animate(0, value, {
-      ease: "easeInOut",
+      type: "spring",
+      ease: "linear",
       duration: 0.7,
       onUpdate: (updatedValue) => {
         setProgress(updatedValue);

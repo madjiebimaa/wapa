@@ -1,9 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 
-import ClientOnly from "@/components/global/client-only";
-
+import useDevices from "@/hooks/useDevices";
 import { Bubble, Color } from "@/lib/types";
 import { generateGrid, getClosestColors } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ export default function ClosestColorBubbles({
   color,
   colors,
 }: ClosestColorBubblesProps) {
+  const { isLargeDevice } = useDevices();
   const numberOfBubbles = 20;
   const bubbleSizes = [4, 3, 2, ...Array(numberOfBubbles - 3).fill(1)];
   const closestColors = getClosestColors({
@@ -48,21 +49,49 @@ export default function ClosestColorBubbles({
       };
     });
 
+  const AnimatedLink = motion(Link);
+
+  const initialBubbleLocations: { x: number; y: number }[] = [
+    { x: -100, y: -100 },
+    { x: 0, y: -100 },
+    { x: 100, y: -100 },
+    { x: 100, y: 0 },
+    { x: 100, y: 100 },
+    { x: 0, y: 100 },
+    { x: -100, y: 100 },
+    { x: -100, y: 0 },
+  ];
+
   return (
-    <ClientOnly>
-      <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2">
-        {bubbles.map((bubble) => (
-          <Link
-            key={bubble.color.id}
-            href={`/colors/${bubble.color.id}`}
-            style={{
-              ...bubble.position,
-              backgroundColor: bubble.color.hexCode,
-            }}
-            className="h-full w-full rounded-full shadow-md transition-transform duration-300 ease-in hover:scale-110 hover:transition-transform hover:duration-500 hover:ease-out"
-          />
-        ))}
-      </section>
-    </ClientOnly>
+    <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2">
+      {bubbles.map((bubble, index) => (
+        <AnimatedLink
+          key={bubble.color.id}
+          href={`/colors/${bubble.color.id}`}
+          style={{
+            ...bubble.position,
+            backgroundColor: bubble.color.hexCode,
+          }}
+          className="h-full w-full rounded-full shadow-md transition-transform duration-300 ease-in hover:scale-110 hover:transition-transform hover:duration-500 hover:ease-out"
+          initial={{
+            opacity: 0,
+            ...initialBubbleLocations[
+              isLargeDevice ? index % initialBubbleLocations.length : 1
+            ],
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            y: 0,
+          }}
+          transition={{
+            type: "spring",
+            duration: 0.7,
+            ease: "linear",
+            delay: index * 0.05,
+          }}
+        />
+      ))}
+    </section>
   );
 }
