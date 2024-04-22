@@ -104,7 +104,6 @@ export default function CmykInput({ form }: CmykInputProps) {
             min={0}
             max={255}
             className="w-[35px]"
-            defaultValue={"0"}
             value={value !== null ? Number(value).toString() : ""}
             onChange={handleCmykChange}
           />

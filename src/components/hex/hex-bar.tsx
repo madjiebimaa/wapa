@@ -13,7 +13,7 @@ interface HexBarProps {
 export default function HexBar({ value }: HexBarProps) {
   const ref = useRef<React.ComponentRef<typeof Progress> | null>(null);
 
-  useProgress(ref, 0, value, {
+  useProgress(0, value, {
     onUpdate: (latest) => {
       const progress = ref.current;
 

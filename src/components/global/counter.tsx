@@ -13,7 +13,7 @@ interface CounterProps extends React.ComponentPropsWithoutRef<typeof motion.p> {
 export default function Counter({ from, to, ...props }: CounterProps) {
   const ref = useRef<React.ComponentRef<typeof motion.p> | null>(null);
 
-  useProgress(ref, from, to, {
+  useProgress(from, to, {
     onUpdate: (latest) => {
       const counter = ref.current;
 

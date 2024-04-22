@@ -97,7 +97,6 @@ export default function RgbInput({ form, field }: RgbInputProps) {
             min={0}
             max={255}
             className="w-[40px]"
-            defaultValue={"0"}
             value={value !== null ? Number(value).toString() : ""}
             onChange={handleRgbChange}
           />
