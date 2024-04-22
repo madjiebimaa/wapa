@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-import useDevices from "@/hooks/useDevices";
 import { Bubble, Color } from "@/lib/types";
 import { generateGrid, getClosestColors } from "@/lib/utils";
 
@@ -16,7 +15,6 @@ export default function ClosestColorBubbles({
   color,
   colors,
 }: ClosestColorBubblesProps) {
-  const { isLargeDevice } = useDevices();
   const numberOfBubbles = 20;
   const bubbleSizes = [4, 3, 2, ...Array(numberOfBubbles - 3).fill(1)];
   const closestColors = getClosestColors({
@@ -63,7 +61,7 @@ export default function ClosestColorBubbles({
   ];
 
   return (
-    <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2">
+    <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2 overflow-hidden">
       {bubbles.map((bubble, index) => (
         <AnimatedLink
           key={bubble.color.id}
@@ -75,9 +73,7 @@ export default function ClosestColorBubbles({
           className="h-full w-full rounded-full shadow-md transition-transform duration-300 ease-in hover:scale-110 hover:transition-transform hover:duration-500 hover:ease-out"
           initial={{
             opacity: 0,
-            ...initialBubbleLocations[
-              isLargeDevice ? index % initialBubbleLocations.length : 1
-            ],
+            ...initialBubbleLocations[index % initialBubbleLocations.length],
           }}
           animate={{
             opacity: 1,
