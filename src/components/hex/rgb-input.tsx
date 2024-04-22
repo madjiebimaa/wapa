@@ -5,7 +5,7 @@ import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
 import CopyButton from "@/components/global/copy-button";
-import { Input } from "@/components/ui/input";
+import InputCounter from "@/components/global/input-counter";
 
 import { RGB } from "@/lib/types";
 import {
@@ -90,14 +90,14 @@ export default function RgbInput({ form, field }: RgbInputProps) {
       <span className="pl-2 text-xs text-muted-foreground">rgb(</span>
       {rgbFields.map(({ id, value }, index) => (
         <Fragment key={id}>
-          <Input
+          <InputCounter
             {...field}
             id={id}
             name={id}
-            type="number"
             min={0}
             max={255}
-            className="w-[40px] rounded-full border-none p-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
+            className="w-[40px]"
+            defaultValue={"0"}
             value={value !== null ? Number(value).toString() : ""}
             onChange={handleRgbChange}
           />

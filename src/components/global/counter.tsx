@@ -1,7 +1,9 @@
 "use client";
 
-import { animate, motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { useRef } from "react";
+
+import useProgress from "@/hooks/use-progress";
 
 interface CounterProps extends React.ComponentPropsWithoutRef<typeof motion.p> {
   from: number;
@@ -9,24 +11,17 @@ interface CounterProps extends React.ComponentPropsWithoutRef<typeof motion.p> {
 }
 
 export default function Counter({ from, to, ...props }: CounterProps) {
-  const ref = useRef<React.ComponentRef<typeof motion.p>>(null);
+  const ref = useRef<React.ComponentRef<typeof motion.p> | null>(null);
 
-  useEffect(() => {
-    const counter = ref.current;
-    if (!counter) return;
+  useProgress(ref, from, to, {
+    onUpdate: (latest) => {
+      const counter = ref.current;
 
-    const controls = animate(from, to, {
-      ease: "easeInOut",
-      duration: 0.7,
-      onUpdate: (value) => {
-        counter.textContent = String(value.toFixed(0));
-      },
-    });
-
-    return () => {
-      controls.stop();
-    };
-  }, [from, to]);
+      if (counter) {
+        counter.textContent = String(latest.toFixed(0));
+      }
+    },
+  });
 
   return <motion.p ref={ref} {...props} />;
 }

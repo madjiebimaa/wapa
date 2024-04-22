@@ -5,7 +5,7 @@ import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
 import CopyButton from "@/components/global/copy-button";
-import { Input } from "@/components/ui/input";
+import InputCounter from "@/components/global/input-counter";
 
 import { CMYK } from "@/lib/types";
 import {
@@ -98,13 +98,13 @@ export default function CmykInput({ form }: CmykInputProps) {
       <span className="pl-2 text-xs text-muted-foreground">cmyk(</span>
       {cmykFields.map(({ id, value }, index) => (
         <Fragment key={id}>
-          <Input
+          <InputCounter
             id={id}
             name={id}
-            type="number"
             min={0}
             max={255}
-            className="w-[35px] rounded-full border-none p-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
+            className="w-[35px]"
+            defaultValue={"0"}
             value={value !== null ? Number(value).toString() : ""}
             onChange={handleCmykChange}
           />

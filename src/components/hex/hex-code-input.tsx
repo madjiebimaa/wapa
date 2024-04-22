@@ -1,12 +1,22 @@
 "use client";
 
 import { Hash } from "lucide-react";
+import { useRef } from "react";
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 
 import BubbleContainer from "@/components/global/bubble-container";
 import CopyButton from "@/components/global/copy-button";
 import { Input } from "@/components/ui/input";
-import { hexCodeToRgb, isValidHexCode, rgbToCmyk } from "@/lib/utils";
+
+import useProgress from "@/hooks/use-progress";
+import {
+  hexCodeToRgb,
+  isValidHexCode,
+  mergeRefs,
+  rgbToCmyk,
+  rgbToHexCode,
+  rgbaStringToRgb,
+} from "@/lib/utils";
 
 interface HexCodeInputProps {
   form: UseFormReturn<
@@ -49,6 +59,18 @@ interface HexCodeInputProps {
 export default function HexCodeInput({ form, field }: HexCodeInputProps) {
   const hexCode = form.watch("hexCode");
 
+  const inputRef = useRef<React.ComponentRef<typeof Input>>(null);
+
+  useProgress(inputRef, "#000000", hexCode, {
+    onUpdate: (latest) => {
+      const input = inputRef.current;
+
+      if (input) {
+        input.value = rgbToHexCode(rgbaStringToRgb(latest)).slice(1);
+      }
+    },
+  });
+
   const handleHexCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
@@ -73,13 +95,13 @@ export default function HexCodeInput({ form, field }: HexCodeInputProps) {
       <Hash className="absolute left-4 top-4 size-4 shrink-0 text-muted-foreground" />
       <Input
         {...field}
+        ref={mergeRefs(field.ref, inputRef)}
         id="hexCode"
         type="text"
         maxLength={6}
         autoComplete="off"
-        className="w-[100px] rounded-full border-none py-2 pl-8 pr-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
-        value={field.value.slice(1)}
         onChange={handleHexCodeChange}
+        className="w-[100px] rounded-full border-none py-2 pl-8 pr-2 text-xs text-secondary-foreground focus-visible:ring-offset-0"
       />
       <CopyButton type="button" text={hexCode} />
     </BubbleContainer>

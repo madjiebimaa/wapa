@@ -1,8 +1,9 @@
-import { CMYK } from "@/lib/types";
 import { clsx, type ClassValue } from "clsx";
+import { type MutableRefObject, type RefCallback } from "react";
 import { twMerge } from "tailwind-merge";
 
 import {
+  CMYK,
   Color,
   ColorSortingOption,
   GenerateGridArgs,
@@ -67,12 +68,22 @@ function numberToHexCode(num: number) {
   return hex.length === 1 ? `0${hex}` : hex;
 }
 
+export function rgbaStringToRgb(str: string): RGB {
+  const [r, g, b] = str.slice(5, -1).split(", ");
+
+  return {
+    r: parseInt(r),
+    g: parseInt(g),
+    b: parseInt(b),
+  };
+}
+
 export function rgbToHexCode({ r, g, b }: RGB): string {
   const rHexCode = numberToHexCode(r);
   const gHexCode = numberToHexCode(g);
   const bHexCode = numberToHexCode(b);
 
-  return `#${rHexCode}${gHexCode}${bHexCode}`;
+  return `#${rHexCode}${gHexCode}${bHexCode}`.toUpperCase();
 }
 
 function normalizeRgb({ r, g, b }: RGB) {
@@ -347,4 +358,24 @@ export function parseMaxNumber(value: string, max: number): number {
   return parseInt(
     parsedValue > max || value.slice(0, 1) === "0" ? value.slice(-1) : result,
   );
+}
+
+type MutableRefList<T> = Array<
+  RefCallback<T> | MutableRefObject<T> | undefined | null
+>;
+
+export function setRef<T>(val: T, ...refs: MutableRefList<T>): void {
+  refs.forEach((ref) => {
+    if (typeof ref === "function") {
+      ref(val);
+    } else if (ref != null) {
+      ref.current = val;
+    }
+  });
+}
+
+export function mergeRefs<T>(...refs: MutableRefList<T>): RefCallback<T> {
+  return (val: T) => {
+    setRef(val, ...refs);
+  };
 }
