@@ -61,7 +61,7 @@ export default function ClosestColorBubbles({
   ];
 
   return (
-    <section className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2 overflow-hidden">
+    <section className="grid flex-1 p-4 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2 overflow-hidden">
       {bubbles.map((bubble, index) => (
         <AnimatedLink
           key={bubble.color.id}
@@ -81,9 +81,8 @@ export default function ClosestColorBubbles({
             y: 0,
           }}
           transition={{
-            type: "spring",
             duration: 0.7,
-            ease: "linear",
+            ease: "easeOut",
             delay: index * 0.05,
           }}
         />
