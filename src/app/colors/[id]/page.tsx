@@ -42,7 +42,7 @@ export default function ColorPage({
         backgroundColor: currentColor.hexCode,
       }}
       className={cn(
-        "flex h-dvh flex-col md:flex-row",
+        "flex h-dvh flex-col transition-colors duration-500 md:flex-row",
         getOppositeContrast(currentColor.hexCode),
       )}
     >

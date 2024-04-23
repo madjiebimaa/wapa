@@ -26,7 +26,10 @@ export default function ImagePage() {
       style={{
         backgroundColor: hexCode,
       }}
-      className={cn("flex h-dvh flex-col p-4", getOppositeContrast(hexCode))}
+      className={cn(
+        "flex h-dvh flex-col p-4 transition-colors duration-500",
+        getOppositeContrast(hexCode),
+      )}
     >
       <section className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8">
         <div className="flex items-center gap-2">

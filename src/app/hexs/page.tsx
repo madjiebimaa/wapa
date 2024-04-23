@@ -74,7 +74,7 @@ export default function HexsPage() {
             : DEFAULT_BACKGROUND_COLOR,
         }}
         className={cn(
-          "flex h-dvh flex-col p-4",
+          "flex h-dvh flex-col p-4 transition-colors duration-500",
           isValidHexCode(hexCode) && getOppositeContrast(hexCode),
         )}
       >

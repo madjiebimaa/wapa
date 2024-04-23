@@ -1,5 +1,6 @@
 "use client";
 
+import { Variants, motion } from "framer-motion";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
@@ -11,7 +12,8 @@ import { Image as FileImage } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useImageActions } from "@/store/image";
 
-interface ImageCardProps extends React.ComponentPropsWithoutRef<"div"> {
+interface ImageCardProps
+  extends React.ComponentPropsWithoutRef<typeof motion.div> {
   image: FileImage;
 }
 
@@ -23,14 +25,23 @@ export default function ImageCard({
   const ref = useRef<React.ComponentRef<typeof Image> | null>(null);
   const imageActions = useImageActions();
 
+  const item: Variants = {
+    hidden: { opacity: 0, y: 100 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div
+    <motion.div
       key={image.id}
+      variants={item}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      onClick={() => imageActions.selectImage(image.id)}
       className={cn(
         "group/image relative size-[200px] cursor-pointer overflow-hidden rounded-md shadow-md",
         className,
       )}
-      onClick={() => imageActions.selectImage(image.id)}
       {...props}
     >
       <Image
@@ -48,6 +59,6 @@ export default function ImageCard({
           <Trash className="size-4 shrink-0" />
         </BubbleButton>
       </BubbleContainer>
-    </div>
+    </motion.div>
   );
 }
