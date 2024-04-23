@@ -87,7 +87,7 @@ export default function HexsPage() {
                 </BubbleButton>
               </BubbleContainer>
               <BubbleContainer>
-                <BubbleText>Convert A Color</BubbleText>
+                <BubbleText>Convert a Color</BubbleText>
               </BubbleContainer>
             </div>
             <RandomColorTooltip form={form} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Palette } from "lucide-react";
+import { Image, LucideIcon, Palette } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -19,6 +19,11 @@ import { useSelectedBackgroundColor } from "@/store/color";
 export default function HomePage() {
   const selectedBackgroundColor = useSelectedBackgroundColor();
 
+  const links: { id: string; Icon: LucideIcon }[] = [
+    { id: "hexs", Icon: Palette },
+    { id: "images", Icon: Image },
+  ];
+
   return (
     <main
       style={{
@@ -33,20 +38,24 @@ export default function HomePage() {
         <Suspense fallback={<ColorFilterSkeleton />}>
           <ColorFilters />
         </Suspense>
-        <BubbleContainer>
-          <Link
-            href="/hexs"
-            className={cn(
-              buttonVariants({
-                variant: bubbleButtonStyle.variant,
-                size: bubbleButtonStyle.size,
-              }),
-              bubbleButtonStyle.className,
-            )}
-          >
-            <Palette className="size-4 shrink-0" />
-          </Link>
-        </BubbleContainer>
+        <section className="flex items-center gap-2">
+          {links.map(({ id, Icon }) => (
+            <BubbleContainer key={id}>
+              <Link
+                href={`/${id}`}
+                className={cn(
+                  buttonVariants({
+                    variant: bubbleButtonStyle.variant,
+                    size: bubbleButtonStyle.size,
+                  }),
+                  bubbleButtonStyle.className,
+                )}
+              >
+                <Icon className="size-4 shrink-0" />
+              </Link>
+            </BubbleContainer>
+          ))}
+        </section>
       </div>
       <Delay duration={500} fallback={<ColorPaletteListSkeleton />}>
         <ColorPaletteList />

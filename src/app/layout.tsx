@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { Toaster as Sonner } from "@/components/ui/sonner";
+
 import { inter } from "@/lib/fonts";
 
 import "./globals.css";
@@ -19,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning>
         {children}
+        <Sonner />
       </body>
     </html>
   );

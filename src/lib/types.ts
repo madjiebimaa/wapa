@@ -24,6 +24,12 @@ export type CMYK = {
   k: number;
 };
 
+export interface Image extends File {
+  id: string;
+  preview: string | ArrayBuffer | null;
+  dominantColorHexCode: string | null;
+}
+
 export type MatrixItem = {
   matrix: number[][];
   rowStartIndex: number;

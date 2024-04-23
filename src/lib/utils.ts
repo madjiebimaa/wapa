@@ -10,11 +10,13 @@ import {
   GenerateMatrixArgs,
   GetClosestColorsArgs,
   Grid,
+  Image,
   Matrix,
   MatrixItem,
   RGB,
   XYZ,
 } from "@/lib/types";
+import { FileRejection } from "react-dropzone";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -378,4 +380,46 @@ export function mergeRefs<T>(...refs: MutableRefList<T>): RefCallback<T> {
   return (val: T) => {
     setRef(val, ...refs);
   };
+}
+
+export function filesToImages(files: File[]): Promise<Image[]> {
+  const filePromises: Promise<Image>[] = [];
+
+  files.forEach((file) => {
+    const fileReader = new FileReader();
+
+    const promise = new Promise<Image>((resolve) => {
+      fileReader.onload = () => {
+        const { result } = fileReader;
+
+        const image: Image = {
+          ...file,
+          id: crypto.randomUUID(),
+          preview: result,
+          dominantColorHexCode: null,
+        };
+
+        resolve(image);
+      };
+    });
+
+    filePromises.push(promise);
+    fileReader.readAsDataURL(file);
+  });
+
+  return Promise.all(filePromises);
+}
+
+export function rejectedFilesToFileErrors(
+  rejectedFiles: FileRejection[],
+): string[] {
+  const errorsMap = new Map<string, string>();
+
+  rejectedFiles.forEach((rejectedFile) => {
+    rejectedFile.errors.forEach((error) => {
+      !errorsMap.has(error.code) && errorsMap.set(error.code, error.message);
+    });
+  });
+
+  return Array.from(errorsMap, ([, value]) => value);
 }

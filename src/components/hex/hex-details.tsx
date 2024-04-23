@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 import BubbleContainer from "@/components/global/bubble-container";
 import Counter from "@/components/global/counter";
 import HexBar from "@/components/hex/hex-bar";
@@ -29,32 +27,44 @@ export default function HexDetails({
   ];
 
   return (
-    <section className="flex flex-col gap-2 p-4">
-      <div className="flex flex-col gap-1">
+    <section className="flex flex-col gap-8 p-4">
+      <section className="flex flex-col gap-1">
         {rgb.map(({ id, value }) => (
           <BubbleContainer key={id} className="w-full">
             <HexBar value={value} />
           </BubbleContainer>
         ))}
-      </div>
-      <div className="grid grid-cols-6 place-content-between">
-        {rgb.map(({ id, label, value }) => (
-          <Fragment key={id}>
-            <span className="font-medium uppercase">{label}</span>
-            <Counter from={0} to={value} className="font-medium" />
-          </Fragment>
-        ))}
-      </div>
-      <section className="flex flex-col items-end gap-3 pr-3">
-        {cmyk.map(({ id, label, value }) => (
-          <div key={id} className="relative">
-            <Counter from={0} to={value} className="h-6 font-medium" />
-            <span className="absolute -right-3 -top-3 text-xs font-medium uppercase">
-              {label}
-            </span>
-          </div>
-        ))}
       </section>
+      <div className="flex flex-col gap-4">
+        <section className="flex items-center gap-6">
+          {rgb.map(({ id, label, value }) => (
+            <div key={id} className="relative w-[35px]">
+              <Counter
+                from={0}
+                to={value}
+                className="grid h-6 place-content-center font-medium"
+              />
+              <span className="absolute -right-3 -top-3 text-xs font-medium uppercase">
+                {label}
+              </span>
+            </div>
+          ))}
+        </section>
+        <section className="flex items-center gap-6">
+          {cmyk.map(({ id, label, value }) => (
+            <div key={id} className="relative w-[35px]">
+              <Counter
+                from={0}
+                to={value}
+                className="grid h-6 place-content-center font-medium"
+              />
+              <span className="absolute -right-3 -top-3 text-xs font-medium uppercase">
+                {label}
+              </span>
+            </div>
+          ))}
+        </section>
+      </div>
     </section>
   );
 }
