@@ -7,13 +7,27 @@ import BubbleButton from "@/components/global/bubble-button";
 import BubbleContainer from "@/components/global/bubble-container";
 import BubbleText from "@/components/global/bubble-text";
 import DropZone from "@/components/image/drop-zone";
-import ImageList from "@/components/image/image-list";
+import ImageCardList from "@/components/image/image-card-list";
+
+import { DEFAULT_BACKGROUND_COLOR } from "@/lib/constants";
+import { cn, getOppositeContrast } from "@/lib/utils";
+import { useSelectedImage } from "@/store/image";
 
 export default function ImagePage() {
   const router = useRouter();
+  const selectedImage = useSelectedImage();
+
+  const hexCode = selectedImage
+    ? selectedImage.dominantColorHexCode!
+    : DEFAULT_BACKGROUND_COLOR;
 
   return (
-    <main className="flex h-dvh flex-col p-4">
+    <main
+      style={{
+        backgroundColor: hexCode,
+      }}
+      className={cn("flex h-dvh flex-col p-4", getOppositeContrast(hexCode))}
+    >
       <section className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8">
         <div className="flex items-center gap-2">
           <BubbleContainer>
@@ -25,8 +39,8 @@ export default function ImagePage() {
             <BubbleText>Dominant Color of Image</BubbleText>
           </BubbleContainer>
         </div>
-        <DropZone />
-        <ImageList />
+        <DropZone className="mx-auto" />
+        <ImageCardList />
       </section>
     </main>
   );

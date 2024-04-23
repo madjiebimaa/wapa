@@ -147,8 +147,6 @@ export function rgbToCmyk(rgb: RGB): CMYK {
     y: Math.round(y * 100),
     k: Math.round(k * 100),
   };
-
-  return { c, m, y, k };
 }
 
 export function cmykToRgb({ c, m, y, k }: CMYK): RGB {

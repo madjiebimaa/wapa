@@ -1,7 +1,9 @@
+import ColorThief from "colorthief";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { Image } from "@/lib/types";
+import { rgbToHexCode } from "@/lib/utils";
 
 type ImageState = {
   images: Image[];
@@ -11,8 +13,15 @@ type ImageState = {
 type ImageActions = {
   actions: {
     setImages: (images: Image[]) => void;
+    selectImage: (id: Image["id"]) => void;
+    addDominantColorToImage: (
+      id: Image["id"],
+      imageRef: HTMLImageElement,
+    ) => void;
   };
 };
+
+const colorThief = new ColorThief();
 
 const intialState: ImageState = {
   images: [],
@@ -25,6 +34,33 @@ const imageStore = create<ImageState & ImageActions>()(
       ...intialState,
       actions: {
         setImages: (images) => set({ images }),
+        selectImage: (id) =>
+          set((state) => {
+            const currentSelectedImage = state.selectedImage;
+            const selectedImage = state.images.find(
+              (image) => image.id === id,
+            )!;
+
+            return {
+              selectedImage:
+                currentSelectedImage === selectedImage ? null : selectedImage,
+            };
+          }),
+        addDominantColorToImage: (id, imageRef) =>
+          set((state) => ({
+            images: state.images.map((image) => {
+              if (image.id === id) {
+                const [r, g, b] = colorThief.getColor(imageRef);
+
+                return {
+                  ...image,
+                  dominantColorHexCode: rgbToHexCode({ r, g, b }),
+                };
+              }
+
+              return image;
+            }),
+          })),
       },
     }),
     {
@@ -32,6 +68,7 @@ const imageStore = create<ImageState & ImageActions>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         images: state.images,
+        selectedImage: state.selectedImage,
       }),
     },
   ),

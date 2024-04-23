@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { Variants, motion } from "framer-motion";
 import Link from "next/link";
 
 import { Bubble, Color } from "@/lib/types";
@@ -60,33 +60,62 @@ export default function ClosestColorBubbles({
     { x: -100, y: 0 },
   ];
 
+  const container: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        ease: "easeOut",
+        duration: 0.7,
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const item = (index: number): Variants => {
+    return {
+      hidden: {
+        opacity: 0,
+        ...initialBubbleLocations[index % initialBubbleLocations.length],
+      },
+      visible: {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        transition: {
+          ease: "easeOut",
+          duration: 0.7,
+        },
+      },
+    };
+  };
+
   return (
-    <section className="grid flex-1 p-4 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2 overflow-hidden">
+    <motion.section
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2 overflow-hidden p-4"
+    >
       {bubbles.map((bubble, index) => (
         <AnimatedLink
           key={bubble.color.id}
           href={`/colors/${bubble.color.id}`}
+          variants={item(index)}
+          whileHover={{
+            scale: 1.2,
+            transition: {
+              type: "spring",
+              stiffness: 300,
+            },
+          }}
           style={{
             ...bubble.position,
             backgroundColor: bubble.color.hexCode,
           }}
-          className="h-full w-full rounded-full shadow-md transition-transform duration-300 ease-in hover:scale-110 hover:transition-transform hover:duration-500 hover:ease-out"
-          initial={{
-            opacity: 0,
-            ...initialBubbleLocations[index % initialBubbleLocations.length],
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-            delay: index * 0.05,
-          }}
+          className="h-full w-full rounded-full shadow-md"
         />
       ))}
-    </section>
+    </motion.section>
   );
 }
