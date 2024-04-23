@@ -1,7 +1,11 @@
 "use client";
 
+import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
+
+import BubbleButton from "@/components/global/bubble-button";
+import BubbleContainer from "@/components/global/bubble-container";
 
 import { Image as FileImage } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -39,6 +43,11 @@ export default function ImageCard({
         alt="Picture to find the dominant color"
         className="object-cover transition-transform duration-300 ease-in group-hover/image:scale-110 group-hover/image:transition-transform group-hover/image:duration-500 group-hover/image:ease-out"
       />
+      <BubbleContainer className="invisible absolute right-2 top-2 opacity-0 transition-transform duration-300 ease-in group-hover/image:visible group-hover/image:opacity-100 group-hover/image:transition-transform group-hover/image:ease-out">
+        <BubbleButton onClick={() => imageActions.deleteImage(image.id)}>
+          <Trash className="size-4 shrink-0" />
+        </BubbleButton>
+      </BubbleContainer>
     </div>
   );
 }

@@ -18,6 +18,7 @@ type ImageActions = {
       id: Image["id"],
       imageRef: HTMLImageElement,
     ) => void;
+    deleteImage: (id: Image["id"]) => void;
   };
 };
 
@@ -60,6 +61,11 @@ const imageStore = create<ImageState & ImageActions>()(
 
               return image;
             }),
+          })),
+        deleteImage: (id) =>
+          set((state) => ({
+            images: state.images.filter((image) => image.id !== id),
+            selectedImage: null,
           })),
       },
     }),
