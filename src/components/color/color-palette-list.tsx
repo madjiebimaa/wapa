@@ -10,9 +10,9 @@ export default function ColorPaletteList() {
 
   return (
     <ScrollArea className="flex-1">
-      <section className="grid grid-cols-2 justify-items-center gap-4 p-4 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-10">
-        {colors.map((color) => (
-          <ColorPalette key={color.id} color={color} />
+      <section className="grid grid-cols-2 justify-items-center gap-4 overflow-hidden p-4 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-10">
+        {colors.map((color, index) => (
+          <ColorPalette key={color.id} color={color} index={index} />
         ))}
       </section>
     </ScrollArea>

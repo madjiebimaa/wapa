@@ -15,28 +15,49 @@ import { useImageActions } from "@/store/image";
 interface ImageCardProps
   extends React.ComponentPropsWithoutRef<typeof motion.div> {
   image: FileImage;
+  images: FileImage[];
+  index: number;
 }
 
 export default function ImageCard({
   image,
+  images,
+  index,
   className,
   ...props
 }: ImageCardProps) {
   const ref = useRef<React.ComponentRef<typeof Image> | null>(null);
   const imageActions = useImageActions();
 
-  const item: Variants = {
-    hidden: { opacity: 0, y: 100 },
-    visible: { opacity: 1, y: 0 },
-  };
+  const item = (index: number): Variants => ({
+    hidden: {
+      opacity: 0,
+      x: -100 * index,
+      y: 0,
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+    },
+    delete: {
+      opacity: 0,
+      x: 60,
+      y: -60,
+      scale: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  });
 
   return (
     <motion.div
       key={image.id}
-      variants={item}
+      variants={item(index)}
       initial="hidden"
       animate="visible"
-      exit="hidden"
+      exit="delete"
       onClick={() => imageActions.selectImage(image.id)}
       className={cn(
         "group/image relative size-[200px] cursor-pointer overflow-hidden rounded-md shadow-md",

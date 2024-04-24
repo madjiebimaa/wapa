@@ -72,23 +72,21 @@ export default function ClosestColorBubbles({
     },
   };
 
-  const item = (index: number): Variants => {
-    return {
-      hidden: {
-        opacity: 0,
-        ...initialBubbleLocations[index % initialBubbleLocations.length],
+  const item = (index: number): Variants => ({
+    hidden: {
+      opacity: 0,
+      ...initialBubbleLocations[index % initialBubbleLocations.length],
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      transition: {
+        ease: "easeOut",
+        duration: 0.7,
       },
-      visible: {
-        opacity: 1,
-        y: 0,
-        x: 0,
-        transition: {
-          ease: "easeOut",
-          duration: 0.7,
-        },
-      },
-    };
-  };
+    },
+  });
 
   return (
     <motion.section

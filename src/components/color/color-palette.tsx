@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 import ColorPaletteTools from "@/components/color/color-palette-tools";
 import LoveButton from "@/components/global/love-button";
 
@@ -6,14 +10,27 @@ import { cn } from "@/lib/utils";
 
 interface ColorPaletteProps {
   color: Color;
+  index: number;
 }
 
-export default function ColorPalette({ color }: ColorPaletteProps) {
+export default function ColorPalette({ color, index }: ColorPaletteProps) {
   const showWhenHoverStyle =
     "invisible opacity-0 transition-all duration-300 ease-in group-hover/color-palette:visible group-hover/color-palette:opacity-100 group-hover/color-palette:transition-all group-hover/color-palette:duration-500 group-hover/color-palette:ease-out";
 
   return (
-    <div className="group/color-palette relative flex min-w-[130px] max-w-[130px] flex-col items-center justify-center gap-2">
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        transition: {
+          type: "spring",
+          duration: 0.5,
+          delay: 0.05 * index,
+        },
+      }}
+      className="group/color-palette relative flex min-w-[130px] max-w-[130px] flex-col items-center justify-center gap-2"
+    >
       <LoveButton
         colorId={color.id}
         variant="ghost"
@@ -35,6 +52,6 @@ export default function ColorPalette({ color }: ColorPaletteProps) {
         hexCode={color.hexCode}
         className={showWhenHoverStyle}
       />
-    </div>
+    </motion.div>
   );
 }

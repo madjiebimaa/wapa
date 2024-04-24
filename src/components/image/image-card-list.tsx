@@ -19,6 +19,8 @@ export default function ImageCardList() {
             <ImageCard
               key={image.id}
               image={image}
+              images={images}
+              index={index}
               className={cn(index === images.length - 1 && "pr-4")}
             />
           ))}
