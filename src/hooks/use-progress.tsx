@@ -6,10 +6,7 @@ import { useEffect } from "react";
 export default function useProgress<T>(
   initialValue: T,
   value: T,
-  options: ValueAnimationTransition<T> | undefined = {
-    ease: "easeInOut",
-    duration: 0.7,
-  },
+  options?: ValueAnimationTransition<T>,
 ) {
   useEffect(() => {
     const controls = animate(initialValue, value, {

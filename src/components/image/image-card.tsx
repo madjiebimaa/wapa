@@ -42,8 +42,6 @@ export default function ImageCard({
     },
     delete: {
       opacity: 0,
-      x: 60,
-      y: -60,
       scale: 0,
       transition: {
         duration: 0.5,
@@ -54,6 +52,7 @@ export default function ImageCard({
   return (
     <motion.div
       key={image.id}
+      layout
       variants={item(index)}
       initial="hidden"
       animate="visible"

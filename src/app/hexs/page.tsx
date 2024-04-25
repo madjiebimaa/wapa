@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Variants, motion } from "framer-motion";
 import { Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -65,6 +66,18 @@ export default function HexsPage() {
 
   const hexCode = form.watch("hexCode");
 
+  const AnimatedBubbleContainer = motion(BubbleContainer);
+
+  const labelVariants: Variants = {
+    hidden: { opacity: 0, x: -100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  };
+
+  const inputVariants: Variants = {
+    hidden: { opacity: 0, x: 100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  };
+
   return (
     <ClientOnly>
       <main
@@ -99,16 +112,26 @@ export default function HexsPage() {
                 name="hexCode"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-2 space-y-0 md:flex-row">
-                    <BubbleContainer>
+                    <AnimatedBubbleContainer
+                      variants={labelVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
                       <BubbleText className="size-full">
                         <FormLabel htmlFor="hexCode" className="uppercase">
                           hex
                         </FormLabel>
                       </BubbleText>
-                    </BubbleContainer>
-                    <FormControl>
-                      <HexCodeInput form={form} field={field} />
-                    </FormControl>
+                    </AnimatedBubbleContainer>
+                    <motion.div
+                      variants={inputVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <FormControl>
+                        <HexCodeInput form={form} field={field} />
+                      </FormControl>
+                    </motion.div>
                   </FormItem>
                 )}
               />
@@ -117,16 +140,26 @@ export default function HexsPage() {
                 name="rgb"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-2 space-y-0 md:flex-row">
-                    <BubbleContainer>
+                    <AnimatedBubbleContainer
+                      variants={labelVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
                       <BubbleText className="size-full">
                         <FormLabel htmlFor="rgb.r" className="uppercase">
                           rgb
                         </FormLabel>
                       </BubbleText>
-                    </BubbleContainer>
-                    <FormControl>
-                      <RgbInput form={form} field={field} />
-                    </FormControl>
+                    </AnimatedBubbleContainer>
+                    <motion.div
+                      variants={inputVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <FormControl>
+                        <RgbInput form={form} field={field} />
+                      </FormControl>
+                    </motion.div>
                   </FormItem>
                 )}
               />
@@ -136,16 +169,26 @@ export default function HexsPage() {
                 name="cmyk"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-2 space-y-0 md:flex-row">
-                    <BubbleContainer>
+                    <AnimatedBubbleContainer
+                      variants={labelVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
                       <BubbleText className="size-full">
                         <FormLabel htmlFor="cmyk.c" className="uppercase">
                           cmyk
                         </FormLabel>
                       </BubbleText>
-                    </BubbleContainer>
-                    <FormControl>
-                      <CmykInput form={form} field={field} />
-                    </FormControl>
+                    </AnimatedBubbleContainer>
+                    <motion.div
+                      variants={inputVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <FormControl>
+                        <CmykInput form={form} field={field} />
+                      </FormControl>
+                    </motion.div>
                   </FormItem>
                 )}
               />

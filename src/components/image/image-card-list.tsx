@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import ImageCard from "@/components/image/image-card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -13,8 +13,8 @@ export default function ImageCardList() {
 
   return (
     <ScrollArea>
-      <section className="mx-auto flex items-center gap-2 py-4">
-        <AnimatePresence>
+      <motion.section layout className="mx-auto flex items-center gap-2 py-4">
+        <AnimatePresence mode="popLayout">
           {images.map((image, index) => (
             <ImageCard
               key={image.id}
@@ -25,7 +25,7 @@ export default function ImageCardList() {
             />
           ))}
         </AnimatePresence>
-      </section>
+      </motion.section>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );

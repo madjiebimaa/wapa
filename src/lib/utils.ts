@@ -17,6 +17,7 @@ import {
   XYZ,
 } from "@/lib/types";
 import { FileRejection } from "react-dropzone";
+import { DEFAULT_OUTSOURCE_COLOR_ID } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -420,4 +421,13 @@ export function rejectedFilesToFileErrors(
   });
 
   return Array.from(errorsMap, ([, value]) => value);
+}
+
+export function generateOutSourceColor(hexCode: Color["hexCode"]): Color {
+  return {
+    id: DEFAULT_OUTSOURCE_COLOR_ID,
+    name: "OUTSOURCE_COLOR_NAME",
+    code: "OUTSOURCE_COLOR_CODE",
+    hexCode,
+  };
 }

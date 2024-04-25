@@ -35,11 +35,11 @@ export default function ClosestColorBubbles({
       const sizeB = b.gridRowEnd - b.gridRowStart;
       return sizeA - sizeB;
     })
-    .map((item, index) => {
+    .map((bubbleVariants, index) => {
       const { id, hexCode } = closestColors[index];
 
       return {
-        position: item,
+        position: bubbleVariants,
         color: {
           id,
           hexCode,
@@ -60,7 +60,7 @@ export default function ClosestColorBubbles({
     { x: -100, y: 0 },
   ];
 
-  const container: Variants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -72,11 +72,11 @@ export default function ClosestColorBubbles({
     },
   };
 
-  const item = (index: number): Variants => ({
-    hidden: {
+  const bubbleVariants: Variants = {
+    hidden: (index) => ({
       opacity: 0,
       ...initialBubbleLocations[index % initialBubbleLocations.length],
-    },
+    }),
     visible: {
       opacity: 1,
       y: 0,
@@ -86,11 +86,11 @@ export default function ClosestColorBubbles({
         duration: 0.7,
       },
     },
-  });
+  };
 
   return (
     <motion.section
-      variants={container}
+      variants={containerVariants}
       initial="hidden"
       animate="visible"
       className="grid flex-1 grid-cols-[repeat(10,_20px)] grid-rows-[repeat(10,_20px)] place-content-center place-items-center gap-2 overflow-hidden p-4"
@@ -99,7 +99,7 @@ export default function ClosestColorBubbles({
         <AnimatedLink
           key={bubble.color.id}
           href={`/colors/${bubble.color.id}`}
-          variants={item(index)}
+          variants={bubbleVariants}
           whileHover={{
             scale: 1.2,
             transition: {
@@ -107,6 +107,7 @@ export default function ClosestColorBubbles({
               stiffness: 300,
             },
           }}
+          custom={index}
           style={{
             ...bubble.position,
             backgroundColor: bubble.color.hexCode,

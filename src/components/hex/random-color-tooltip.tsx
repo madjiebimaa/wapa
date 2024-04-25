@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import useDevices from "@/hooks/useDevices";
+import useDevices from "@/hooks/use-devices";
 import { getRandomInt, hexCodeToRgb, rgbToCmyk } from "@/lib/utils";
 import { useColors } from "@/store/color";
 
